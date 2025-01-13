@@ -1,0 +1,3 @@
+@echo off
+echo Stopping Spring Boot server...
+FOR /F "tokens=5" %%A IN ('netstat -aon ^| find "8080"') DO taskkill /F /PID %%A
