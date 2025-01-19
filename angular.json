@@ -70,10 +70,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "efcbert-app:build:production"
+              "buildTarget": "efcbert-app:build:production"
             },
             "development": {
-              "browserTarget": "efcbert-app:build:development"
+              "buildTarget": "efcbert-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,7 +81,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "efcbert-app:build"
+            "buildTarget": "efcbert-app:build"
           }
         },
         "test": {
