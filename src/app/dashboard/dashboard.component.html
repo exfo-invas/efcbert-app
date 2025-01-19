@@ -1,0 +1,25 @@
+<div class="main-content">
+  <div class="base-form-content">
+
+    <mat-form-field>
+      <mat-label>Enter IP Address</mat-label>
+      <input matInput [(ngModel)]="ipAddress">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Enter Port number</mat-label>
+      <input type="number" matInput [(ngModel)]="portNum">
+    </mat-form-field>
+
+    <button mat-flat-button (click)="getConnection(ipAddress, portNum)">Connect</button>
+
+    <router-outlet></router-outlet>
+  </div>
+
+  <div>
+
+    <p>Connected to: {{ ipAddress }}:{{ portNum }}</p>
+    <p>{{ reponseData }}</p>
+  </div>
+
+</div>

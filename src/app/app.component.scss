@@ -1,5 +1,9 @@
 /* app.component.css */
 .landing-page {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100vh;
   text-align: center;
   font-family: Arial, sans-serif;
   color: #333;
@@ -9,8 +13,16 @@
   background-color: #1976d2;
   color: white;
   padding: 20px;
+  height: 3vh;
 }
 
-.main-content {
-  margin: 20px;
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1vh;
+  background-color: #1976d2;
+  color: white;
+  padding: 20px;
 }
