@@ -1,7 +1,7 @@
 //method to send http request to the server
 
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
