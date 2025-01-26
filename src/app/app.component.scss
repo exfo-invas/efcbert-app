@@ -1,19 +1,46 @@
 /* app.component.css */
 .landing-page {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  height: 100vh;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  color: #333;
+  height: 100%;
+}
+
+.logo {
+  height: 50px;
+  width: 150px;
+  float: left;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .header {
-  background-color: #1976d2;
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 8vh;
   padding: 20px;
-  height: 3vh;
+  background: #ffffff;
+  /*background: var(--p-sky-400);*/
+  color: #0b0f0e;
+}
+
+.header-status {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  height: 50vh;
+  align-items: center;
+}
+
+.base-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  flex-wrap: wrap;
+  align-items: baseline;
 }
 
 .footer {
@@ -21,8 +48,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 1vh;
-  background-color: #1976d2;
-  color: white;
-  padding: 20px;
+  height: 3vh;
+  padding: 10px;
+}
+
+.button-p-card {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
 }
