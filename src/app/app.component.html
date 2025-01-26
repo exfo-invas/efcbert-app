@@ -1,13 +1,75 @@
 <!-- app.component.html -->
+<!--<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+  rel="stylesheet">-->
+
 <div class="landing-page">
   <header class="header">
-    <h1>Enchanced FC BERT</h1>
+    <img (click)="routeToHome()" src="assets/logo/Title-removebg.png" alt="EFCBert Logo" class="logo">
+    <div class="header-status">
+      <!--<div>
+        <p-toast />
+        <p-confirmPopup>
+          &lt;!&ndash;<ng-template #content let-message>
+            <div
+              class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700 p-4 mb-4 pb-0"
+            >
+              <i [class]="message.icon" class="!text-6xl text-primary-500"></i>
+              <p>{{ message.message }}</p>
+            </div>
+          </ng-template>&ndash;&gt;
+        </p-confirmPopup>
+        <p-button *ngIf="connStatus" pTooltip="Connected to FCBert Tool" icon="pi pi-check" iconPos="right"
+                  severity="primary"/>
+      </div>-->
+      <p-button *ngIf="connStatus" pTooltip="Connected to FCBert Tool" icon="pi pi-check" iconPos="right"
+                severity="primary"/>
+      <p-button *ngIf="!connStatus" pTooltip="Disconnected from FCBert Tool" icon="pi pi-exclamation-triangle"
+                iconPos="right" severity="danger"/>
+    </div>
   </header>
+
+  <app-login-page [connStatus]="connStatus" (connStatusChange)="getConnection($event)" ></app-login-page>
 
   <router-outlet></router-outlet>
 
   <footer class="footer">
-    <p>&copy; 2024 My Angular App. All rights reserved.</p>
+    <p>&copy; 2024 All rights reserved.</p>
   </footer>
 </div>
+
+<!--<div class="base-form-content">
+  <p-card header="Connect to Testing Tools">
+    <table>
+      <tr>
+        <td><label for="ipaddress">IP Address: </label></td>
+        <td><input pInputText id="ipaddress" [(ngModel)]="ipAddress"/></td>
+      </tr>
+      <tr>
+        <td><label for="port">Port: </label></td>
+        <td><input pInputText id="port" [(ngModel)]="portNum"/></td>
+      </tr>
+      <tr>
+        <td><p-button (click)="getConnection()" label="Connect"/></td>
+      </tr>
+    </table>
+  </p-card>
+</div>
+<div *ngIf="isNew">
+  <p-card header="Status connection">
+    <table>
+      <tr>
+        <td><p>Connected to: {{ ipAddress }}:{{ portNum }}</p></td>
+      </tr>
+      <p-message *ngIf="connStatus" severity="success">Connected</p-message>
+      <p-message *ngIf="!connStatus" severity="error">Connection Failed</p-message>
+    </table>
+    <div>
+      <p-button (click)="closeConnect()" class="mt-2">Close</p-button>
+    </div>
+  </p-card>
+</div>
+</div>-->
 
