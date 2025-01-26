@@ -1,0 +1,19 @@
+<div *ngIf="!connStatus" class="main-content">
+  <div class="base-form-content">
+    <p-card header="Connect to Testing Tools">
+      <table>
+        <tr>
+          <td><label for="ipaddress">IP Address: </label></td>
+          <td><input pInputText id="ipaddress" [(ngModel)]="ipaddress"/></td>
+        </tr>
+        <tr>
+          <td><label for="port">Port: </label></td>
+          <td><input pInputText id="port" [(ngModel)]="port"/></td>
+        </tr>
+      </table>
+      <div class="button-p-card">
+        <p-button (click)="getConnection()" label="Connect"/>
+      </div>
+    </p-card>
+  </div>
+</div>
