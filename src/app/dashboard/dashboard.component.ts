@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../service/api.service";
 import {ConnectionTCP} from "../service/api.service.model";
+import {DashboardModel} from "./dashboard.model";
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +18,7 @@ export class DashboardComponent implements OnInit {
   isNew: boolean = false;
   command: string;
   commandResponse: string = "";
+  dashboardData: DashboardModel[];
 
   constructor(private apiService: ApiService) {
   }
@@ -25,6 +27,13 @@ export class DashboardComponent implements OnInit {
     if (this.ipAddress === '' && this.portNum === '') {
       this.isNew = false;
     }
+
+    this.dashboardData = [
+      {
+        des: "Interface/Rate",
+        values: '? (1X/2x/3x/4x/8x/16x/32x/64x)'
+      }
+    ]
   }
 
   getConnection() {

@@ -1,10 +1,36 @@
 .main-content {
   margin: 20px;
   display: flex;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding : 20px;
+  flex-wrap: wrap;
   gap: 2em;
+  justify-content: center;
+  background: white;
+  border-radius: 5px;
 }
+
+.second-pcard {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+}
+
+.initial-td {
+  border: 1px solid black;
+  padding: 8px;
+  border-radius: 5px;
+  min-width: 100px;
+}
+
+.cards-p {
+  min-width: 400px;
+}
+
+/*
 
 .base-form-content {
   display: flex;
@@ -30,3 +56,4 @@
   align-items: baseline;
   gap: 1em;
 }
+*/

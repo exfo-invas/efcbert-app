@@ -1,0 +1,18 @@
+.main-content {
+  margin: 20px;
+}
+
+.base-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.form-input-fields{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap : 1em;
+}

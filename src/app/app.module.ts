@@ -22,6 +22,9 @@ import {Toast} from "primeng/toast";
 import {ConfirmPopup} from "primeng/confirmpopup";
 import {NgOptimizedImage} from "@angular/common";
 import {LoginPageComponent} from "./shared/login-page/login-page.component";
+import {ServerStatusComponent} from "./shared/server-status/server-status.component";
+import {Rating} from "primeng/rating";
+import {Tag} from "primeng/tag";
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import {LoginPageComponent} from "./shared/login-page/login-page.component";
     ConfirmPopup,
     NgOptimizedImage,
     LoginPageComponent,
+    ServerStatusComponent,
+    Rating,
+    Tag,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

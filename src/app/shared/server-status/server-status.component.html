@@ -1,0 +1,30 @@
+<div class="header-status">
+  <div *ngIf="connStatus">
+    <p-button *ngIf="connStatus" pTooltip="Connected to FCBert Tool" icon="pi pi-check" iconPos="left"
+              severity="primary" label="Connected"/>
+  </div>
+
+  <div *ngIf="!connStatus">
+      <p-button pTooltip="Disconnected from FCBert Tool" icon="pi pi-exclamation-triangle"
+                iconPos="left" severity="danger" label="Disconnected"
+                (click)="showDialog()"
+      />
+
+      <p-dialog header="Disconnected from testing tool" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+        <div>
+          <p> Attempt to re-connect : <b>{{ipaddress}}</b>:<b>{{port}}</b> </p>
+          <p-button label="Save" (click)="visible"/>
+        </div>
+
+        <div class="flex gap-4 mb-8">
+          <label for="email" class="font-semibold w-24">Email</label>
+          <input pInputText id="email" class="flex-auto" autocomplete="off"/>
+        </div>
+        <div class="flex justify-end gap-2">
+          <p-button label="Cancel" severity="secondary" (click)="visible = false"/>
+          <p-button label="Save" (click)="visible = false"/>
+        </div>
+      </p-dialog>
+  </div>
+
+</div>
