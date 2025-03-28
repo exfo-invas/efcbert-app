@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   command: string;
   commandResponse: string = "";
   dashboardData: DashboardModel[];
+  fe_rate_set="?(1X/2X /3X/4X/8X/16X /32X/64X)"
 
   constructor(private apiService: ApiService) {
   }

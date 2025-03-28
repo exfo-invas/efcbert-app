@@ -1,14 +1,25 @@
 <div class="main-content">
   <div class="cards-p">
-    <p-card header="Test Structure">
+    <p-card header="PORT B1 2X ">
       <table>
         <tr class="initial-tr">
-          <td>Interface/Rate: </td>
-          <td class="initial-td">?(1X/2X /3X/4X/8X/16X /32X/64X)</td>
+          <td>LASER Status:  </td>
+          <td class="initial-tr"><label class="toggle-switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+        </label></td>
         </tr>
         <tr class="initial-tr">
-          <td>Port: </td>
-          <td class="initial-td">?(1X/2X /3X/4X/8X/16X /32X/64X)</td>
+          <td>FC Rate set: </td>
+          <td class="initial-td">{{fe_rate_set}}</td>
+        </tr>
+        <tr class="initial-tr">
+          <td>SFP/SFP28 & Port:  </td>
+          <td class="initial-td">{{fe_rate_set}}</td>
+        </tr>
+        <tr class="initial-tr">
+          <td>Link Status:   </td>
+          <td class="initial-td">{{fe_rate_set}}</td>
         </tr>
       </table>
     </p-card>
