@@ -42,6 +42,11 @@
   flex-direction: row;
 }
 
+.side-bar{
+  display: flex;
+  flex-direction: column;
+}
+
 .button{
   background-color: rgb(89, 89, 236);
   margin-bottom: 2px;
