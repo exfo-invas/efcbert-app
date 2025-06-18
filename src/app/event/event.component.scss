@@ -1,5 +1,8 @@
 .main-content {
-  margin: 20px;
+  height: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 1%;
 }
 
 .base-form-content {

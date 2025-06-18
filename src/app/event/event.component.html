@@ -1,24 +1,57 @@
 <div class="main-content">
-  <div class="base-form-content">
 
-<!--    <div class="base-form-content">
-      <div class="form-input-fields">
-        <mat-label>SCPI Command</mat-label>
-        <input matInput size="small" class="mat-form-field">
-        <mat-form-field subscriptSizing="dynamic" class="mat-form-field">
-          <input matInput size="small">
-        </mat-form-field>
+  <p-table [value]="throughPuts">.
+    <ng-template #caption>
+      <div class="flex items-center justify-between">
+        <h5 class="m-0">Through-Put Test Results</h5>
       </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columns">{{ col.header }}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-throughPut>
+      <tr>
+        <td *ngFor="let col of columns">{{ throughPut[col.field] }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 
-      <div class="form-input-fields">
-        <mat-label>Enter Port number</mat-label>
-
-        <mat-form-field>
-          <input matInput size="small" >
-        </mat-form-field>
+  <p-table [value]="frameLosses">.
+    <ng-template #caption>
+      <div class="flex items-center justify-between">
+        <h5 class="m-0">Frame Loss Test Results</h5>
       </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columnsFramesLoss">{{ col.header }}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-frameLoss>
+      <tr>
+        <td *ngFor="let col of columnsFramesLoss">{{ frameLoss[col.field] }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 
-      <button mat-flat-button >Connect</button>
-    </div>-->
-  </div>
+  <p-table [value]="latencies">.
+    <ng-template #caption>
+      <div class="flex items-center justify-between">
+        <h5 class="m-0">Latency Test Results</h5>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columnsLatency">{{ col.header }}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-latency>
+      <tr>
+        <td *ngFor="let col of columnsLatency">{{ latency[col.field] }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>

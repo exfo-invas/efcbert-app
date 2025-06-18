@@ -25,6 +25,7 @@ import {LoginPageComponent} from "./shared/login-page/login-page.component";
 import {ServerStatusComponent} from "./shared/server-status/server-status.component";
 import {Rating} from "primeng/rating";
 import {Tag} from "primeng/tag";
+import {Divider} from "primeng/divider";
 
 @NgModule({
   declarations: [
@@ -33,26 +34,27 @@ import {Tag} from "primeng/tag";
     EventComponent
   ],
   bootstrap: [AppComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    InputText,
-    Card,
-    TableModule,
-    Button,
-    Message,
-    Panel,
-    Tooltip,
-    Toast,
-    ConfirmPopup,
-    NgOptimizedImage,
-    LoginPageComponent,
-    ServerStatusComponent,
-    Rating,
-    Tag,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        InputText,
+        Card,
+        TableModule,
+        Button,
+        Message,
+        Panel,
+        Tooltip,
+        Toast,
+        ConfirmPopup,
+        NgOptimizedImage,
+        LoginPageComponent,
+        ServerStatusComponent,
+        Rating,
+        Tag,
+        Divider,
+    ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
