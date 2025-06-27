@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MegaMenuItem} from "primeng/api";
+import {ConnectionService} from "./service/connection.service";
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,8 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  constructor() {
+  constructor(private connectionService: ConnectionService) {
+    this.connStatus = this.connectionService.getAddress() !== '';
   }
 
   ngOnInit() {

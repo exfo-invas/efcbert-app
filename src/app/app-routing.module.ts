@@ -2,15 +2,11 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {EventComponent} from "./event/event.component";
-import {LoginPageComponent} from "./shared/login-page/login-page.component";
 import {LoggingComponent} from "./logging/logging.component";
 
 const routes: Routes = [
   {
-    path: '', redirectTo: '/login', pathMatch: 'full'
-  },
-  {
-    path: 'login', component: LoginPageComponent
+    path: '', redirectTo: '/home', pathMatch: 'full'
   },
   {
     path: 'home', component: DashboardComponent

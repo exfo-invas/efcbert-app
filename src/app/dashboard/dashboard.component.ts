@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../service/api.service";
 import {ConnectionTCP} from "../service/api.service.model";
 import {DashboardModel} from "./dashboard.model";
+import {ConnectionService} from "../service/connection.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -27,9 +28,9 @@ export class DashboardComponent implements OnInit {
   ];
 
   portB1Data = {
-    fcRateSet: 123,
-    sfpPort: '0',
-    linkStatus: 'Disconnected'
+    fcRateSet: '',
+    sfpPort: '',
+    linkStatus: false
   };
 
   wwnColumns = [
@@ -44,14 +45,14 @@ export class DashboardComponent implements OnInit {
   ];
 
   wwnData = {
-    source: '0x1234567890abcdef',
-    destination: '0xabcdef1234567890',
-    bufferFlow: 'Enabled',
-    bbCredit: 255,
-    logging: 'Enabled',
-    topology: 'Full Mesh',
-    fbStatus: 'Active',
-    portStatus: 'Online'
+    source: '',
+    destination: '',
+    bufferFlow: '',
+    bbCredit: '',
+    logging: '',
+    topology: '',
+    fbStatus: '',
+    portStatus: ''
   };
 
   deviceConfigColumns = [
@@ -63,30 +64,19 @@ export class DashboardComponent implements OnInit {
   ];
 
   deviceConfigData = {
-    pattern: 'EFCBERT-1234',
-    txPattern: 'Type A',
-    rxPattern: 'Type B',
-    fcFrameSize: 2048,
-    trafficShaping: 'Enabled'
+    pattern: '',
+    txPattern: '',
+    rxPattern: '',
+    fcFrameSize: '',
+    trafficShaping: ''
   };
-  isDeviceConnected: boolean = true;
 
-
-
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private connectionService :ConnectionService) {
+    this.default();
   }
 
   ngOnInit() {
-    if (this.ipAddress === '' && this.portNum === '') {
-      this.isNew = false;
-    }
-
-    this.dashboardData = [
-      {
-        des: "Interface/Rate",
-        values: '? (1X/2x/3x/4x/8x/16x/32x/64x)'
-      }
-    ]
+    this.isNew = !this.connectionService.getStatus();
   }
 
   getConnection() {
@@ -118,11 +108,7 @@ export class DashboardComponent implements OnInit {
   }
 
   default() {
-    this.ipAddress = '';
-    this.portNum = '';
     this.isNew = false;
     this.connStatus = false;
-    this.command = '';
-    this.commandResponse = '';
   }
 }

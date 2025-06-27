@@ -29,6 +29,7 @@ import {Divider} from "primeng/divider";
 import {Menu} from "primeng/menu";
 import {MegaMenu} from "primeng/megamenu";
 import {Ripple} from "primeng/ripple";
+import {Skeleton} from "primeng/skeleton";
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {Ripple} from "primeng/ripple";
     Menu,
     MegaMenu,
     Ripple,
+    Skeleton,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

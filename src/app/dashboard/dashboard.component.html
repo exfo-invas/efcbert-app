@@ -5,20 +5,17 @@
         <tr class="initial-tr">
           <td>LASER Status</td>
           <td class="initial-tr">
-            <ng-template>
-              <span [ngClass]="{
-              'status-indicator': true,
-              'connected': isDeviceConnected,
-              'disconnected': !isDeviceConnected
-              }"></span>
-              <span>{{ isDeviceConnected ? 'Connected' : 'Disconnected' }}</span>
-            </ng-template>
           </td>
         </tr>
         <tr class="initial-tr" *ngFor="let col of portB1Columns">
           <td>{{ col.header }}</td>
           <td>:</td>
-          <td>{{ portB1Data[col.field] }}</td>
+          <td *ngIf="isNew">
+            <p-skeleton width="5rem" styleClass="mb-2" />
+          </td>
+          <td *ngIf="!isNew">
+            {{ portB1Data[col.field] }}
+          </td>
         </tr>
       </table>
     </p-card>
@@ -29,7 +26,10 @@
         <tr class="initial-tr" *ngFor="let col of wwnColumns">
           <td>{{ col.header }}</td>
           <td>:</td>
-          <td>{{ wwnData[col.field] }}</td>
+          <td *ngIf="isNew">
+            <p-skeleton width="5rem" styleClass="mb-2" />
+          </td>
+          <td *ngIf="isNew">{{ wwnData[col.field] }}</td>
         </tr>
       </table>
     </p-card>
@@ -40,7 +40,10 @@
         <tr class="initial-tr" *ngFor="let col of deviceConfigColumns">
           <td>{{ col.header }}</td>
           <td>:</td>
-          <td>{{ deviceConfigData[col.field] }}</td>
+          <td *ngIf="isNew">
+            <p-skeleton width="5rem" styleClass="mb-2" />
+          </td>
+          <td *ngIf="!isNew">{{ deviceConfigData[col.field] }}</td>
         </tr>
       </table>
     </p-card>
