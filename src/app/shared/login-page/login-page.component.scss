@@ -12,3 +12,17 @@
   flex-wrap: wrap;
   align-items: baseline;
 }
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.dialog-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  flex-wrap: wrap;
+  align-items: center;
+}

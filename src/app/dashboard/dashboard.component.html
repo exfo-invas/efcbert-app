@@ -1,62 +1,48 @@
 <div class="main-content">
   <div class="cards-p">
-    <p-card header="Test Structure">
+    <p-card header="PORT B1">
       <table>
         <tr class="initial-tr">
-          <td>Interface/Rate: </td>
-          <td class="initial-td">?(1X/2X /3X/4X/8X/16X /32X/64X)</td>
+          <td>LASER Status</td>
+          <td class="initial-tr">
+            <ng-template>
+              <span [ngClass]="{
+              'status-indicator': true,
+              'connected': isDeviceConnected,
+              'disconnected': !isDeviceConnected
+              }"></span>
+              <span>{{ isDeviceConnected ? 'Connected' : 'Disconnected' }}</span>
+            </ng-template>
+          </td>
         </tr>
-        <tr class="initial-tr">
-          <td>Port: </td>
-          <td class="initial-td">?(1X/2X /3X/4X/8X/16X /32X/64X)</td>
+        <tr class="initial-tr" *ngFor="let col of portB1Columns">
+          <td>{{ col.header }}</td>
+          <td>:</td>
+          <td>{{ portB1Data[col.field] }}</td>
         </tr>
       </table>
     </p-card>
   </div>
   <div class="cards-p">
-    <p-card header="FCBERT Settings">
+    <p-card header="PORT B1 (WWN)">
       <table>
-        <tr class="initial-tr">
-          <td>Tx Pattern: </td>
-          <td class="initial-td">? PRBS 7 /9/11/15/31/User</td>
-        </tr>
-        <tr class="initial-tr">
-          <td>Rx Pattern: </td>
-          <td class="initial-td">? PRBS 7 /9/11/15/31/User</td>
+        <tr class="initial-tr" *ngFor="let col of wwnColumns">
+          <td>{{ col.header }}</td>
+          <td>:</td>
+          <td>{{ wwnData[col.field] }}</td>
         </tr>
       </table>
     </p-card>
   </div>
   <div class="cards-p">
-    <p-card header="Service Disruption">
+    <p-card header="FC BERT Configuration">
       <table>
-        <tr class="initial-tr">
-          <td>Threshold set:</td>
-          <td class="initial-td">? </td>
+        <tr class="initial-tr" *ngFor="let col of deviceConfigColumns">
+          <td>{{ col.header }}</td>
+          <td>:</td>
+          <td>{{ deviceConfigData[col.field] }}</td>
         </tr>
       </table>
     </p-card>
-  </div>
-  <div class="cards-p">
-    <p-card header="FCBERT Details">
-      <table>
-        <tr class="initial-tr">
-          <td>Range: </td>
-          <td class="initial-td">? </td>
-        </tr>
-        <tr class="initial-tr">
-          <td>Latency: </td>
-          <td class="initial-td">Enabled/Disabled </td>
-        </tr>
-        <tr class="initial-tr">
-          <td>Current Tx rate: </td>
-          <td class="initial-td">MBPS/GBPS </td>
-        </tr>
-      </table>
-    </p-card>
-  </div>
-
-  <div class="second-pcard">
-    <p-button label="START TEST" [raised]="true" severity="success" />
   </div>
 </div>

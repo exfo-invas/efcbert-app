@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   gap: 2em;
   justify-content: center;
-  background: white;
+  /*background: white;*/
   border-radius: 5px;
 }
 
@@ -18,15 +18,23 @@ table {
   width: 100%;
 }
 
-.initial-td {
-  border: 1px solid black;
-  padding: 8px;
-  border-radius: 5px;
-  min-width: 100px;
-}
-
 .cards-p {
   min-width: 400px;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.connected {
+  background-color: #4caf50; /* Green */
+}
+.disconnected {
+  background-color: #f44336; /* Red */
 }
 
 /*

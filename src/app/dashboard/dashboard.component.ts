@@ -20,6 +20,59 @@ export class DashboardComponent implements OnInit {
   commandResponse: string = "";
   dashboardData: DashboardModel[];
 
+  portB1Columns = [
+    { field: 'fcRateSet', header: 'FC Rate Set' },
+    { field: 'sfpPort', header: 'SFP & Port' },
+    { field: 'linkStatus', header: 'Throughput rate' }
+  ];
+
+  portB1Data = {
+    fcRateSet: 123,
+    sfpPort: '0',
+    linkStatus: 'Disconnected'
+  };
+
+  wwnColumns = [
+    { field: 'source', header: 'Source' },
+    { field: 'destination', header: 'Destination' },
+    { field: 'bufferFlow', header: 'Buffer Flow Control' },
+    { field: 'bbCredit', header: 'Available BB Credit' },
+    { field: 'logging', header: 'logging' },
+    { field: 'topology', header: 'Discovered Topology' },
+    { field: 'fbStatus', header: 'Fabric Status' },
+    { field: 'portStatus', header: 'Port Status' }
+  ];
+
+  wwnData = {
+    source: '0x1234567890abcdef',
+    destination: '0xabcdef1234567890',
+    bufferFlow: 'Enabled',
+    bbCredit: 255,
+    logging: 'Enabled',
+    topology: 'Full Mesh',
+    fbStatus: 'Active',
+    portStatus: 'Online'
+  };
+
+  deviceConfigColumns = [
+    { field: 'pattern', header: 'Device Name' },
+    { field: 'txPattern', header: 'Device Type' },
+    { field: 'rxPattern', header: 'Firmware Version' },
+    { field: 'fcFrameSize', header: 'Serial Number' },
+    { field: 'trafficShaping', header: 'trafficShaping' }
+  ];
+
+  deviceConfigData = {
+    pattern: 'EFCBERT-1234',
+    txPattern: 'Type A',
+    rxPattern: 'Type B',
+    fcFrameSize: 2048,
+    trafficShaping: 'Enabled'
+  };
+  isDeviceConnected: boolean = true;
+
+
+
   constructor(private apiService: ApiService) {
   }
 

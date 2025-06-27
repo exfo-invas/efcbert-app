@@ -1,0 +1,17 @@
+<p-table [value]="logsData">.
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Latency Test Results</h5>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of logColumns">{{ col.header }}</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-latency>
+    <tr>
+      <td *ngFor="let col of logColumns">{{ latency[col.field] }}</td>
+    </tr>
+  </ng-template>
+</p-table>

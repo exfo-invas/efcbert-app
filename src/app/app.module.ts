@@ -26,6 +26,9 @@ import {ServerStatusComponent} from "./shared/server-status/server-status.compon
 import {Rating} from "primeng/rating";
 import {Tag} from "primeng/tag";
 import {Divider} from "primeng/divider";
+import {Menu} from "primeng/menu";
+import {MegaMenu} from "primeng/megamenu";
+import {Ripple} from "primeng/ripple";
 
 @NgModule({
   declarations: [
@@ -34,27 +37,30 @@ import {Divider} from "primeng/divider";
     EventComponent
   ],
   bootstrap: [AppComponent],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        InputText,
-        Card,
-        TableModule,
-        Button,
-        Message,
-        Panel,
-        Tooltip,
-        Toast,
-        ConfirmPopup,
-        NgOptimizedImage,
-        LoginPageComponent,
-        ServerStatusComponent,
-        Rating,
-        Tag,
-        Divider,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    InputText,
+    Card,
+    TableModule,
+    Button,
+    Message,
+    Panel,
+    Tooltip,
+    Toast,
+    ConfirmPopup,
+    NgOptimizedImage,
+    LoginPageComponent,
+    ServerStatusComponent,
+    Rating,
+    Tag,
+    Divider,
+    Menu,
+    MegaMenu,
+    Ripple,
+  ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
