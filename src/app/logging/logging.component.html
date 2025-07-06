@@ -1,4 +1,7 @@
-<p-table [value]="logsData">.
+<!-- <p-table [value]="logsData"
+[scrollable]="true"
+  [scrollHeight]="'calc(100vh - 150px)'"
+>
   <ng-template #caption>
     <div class="flex items-center justify-between">
       <h5 class="m-0">Latency Test Results</h5>
@@ -14,4 +17,27 @@
       <td *ngFor="let col of logColumns">{{ latency[col.field] }}</td>
     </tr>
   </ng-template>
-</p-table>
+</p-table> -->
+
+<div class="flex items-center justify-between mb-4">
+  <h5 class="m-0">Latency Test Results</h5>
+  <p-table [value]="paddedLogsData" [scrollable]="true" [scrollHeight]="'calc(95vh - 130px)'"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #header>
+      <tr>
+        <th style="width:10%">ID</th>
+        <th style="width:25%">Start TIme</th>
+        <th style="width:40%">Event</th>
+        <th style="width:25%">Duration</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-customer let-rowIndex="rowIndex">
+      <tr style="height: 46px;">
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.startTime }}</td>
+        <td>{{ customer.event }}</td>
+        <td>{{ customer.duration }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
