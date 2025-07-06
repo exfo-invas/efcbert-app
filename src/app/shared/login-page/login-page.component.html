@@ -19,13 +19,17 @@
 </div>-->
 
 <div>
-  <p-dialog header="Connect to FCBERT Test Engine" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+  <p-dialog header="Connect to FCBERT Test Engine" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem', height: '20rem' }">
     <div class="dialog-content">
       <div class="dialog-form-content">
         <table>
           <tr>
             <td><label for="ipaddress">IP Address: </label></td>
-            <td><input pInputText id="ipaddress" [(ngModel)]="ipaddress"/></td>
+            <td>
+              <p-inputgroup>
+                <p-select [(ngModel)]="selectedIp" [options]="ipLists" placeholder="IP Address" />
+              </p-inputgroup>
+            </td>
           </tr>
           <tr>
             <td><label for="port">Port: </label></td>
@@ -33,16 +37,14 @@
           </tr>
         </table>
         <div class="button-p-card">
-          <p-button (click)="getConnection()" label="Connect"/>
+          <p-button (click)="getConnection()" label="Connect" />
         </div>
       </div>
 
-      <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{ height: '6px' }"/>
+      <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{ height: '6px' }" />
       <p-message *ngIf="ifError" severity="error" variant="outlined">
         {{ errorMessage }}
       </p-message>
     </div>
   </p-dialog>
 </div>
-
-
