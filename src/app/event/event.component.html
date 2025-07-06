@@ -2,18 +2,25 @@
 
   <p-table [value]="throughPuts">.
     <ng-template #caption>
-      <div class="flex items-center justify-between">
-        <h5 class="m-0">Through-Put Test Results</h5>
+      <div class="flex items-center justify-between padding-0">
+        <strong>Throughput</strong>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th *ngFor="let col of columns">{{ col.header }}</th>
+        <th *ngFor="let col of columns">
+          <div class="text-center">{{ col.header }}</div>
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-throughPut>
       <tr>
-        <td *ngFor="let col of columns">{{ throughPut[col.field] }}</td>
+        <td *ngFor="let col of columns">
+          <div class="text-center">
+            {{ throughPut[col.field] }}
+            {{ col.suffix ? col.suffix : '' }}
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>
@@ -21,17 +28,26 @@
   <p-table [value]="frameLosses">.
     <ng-template #caption>
       <div class="flex items-center justify-between">
-        <h5 class="m-0">Frame Loss Test Results</h5>
+        <Strong>Frame Loss</Strong>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th *ngFor="let col of columnsFramesLoss">{{ col.header }}</th>
+        <th *ngFor="let col of columnsFramesLoss">
+          <div class="text-center">
+            {{ col.header }}
+          </div>
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-frameLoss>
       <tr>
-        <td *ngFor="let col of columnsFramesLoss">{{ frameLoss[col.field] }}</td>
+        <td *ngFor="let col of columnsFramesLoss">
+          <div class="text-center">
+            {{ frameLoss[col.field] }}
+            {{ col.suffix }}
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>
@@ -39,17 +55,26 @@
   <p-table [value]="latencies">.
     <ng-template #caption>
       <div class="flex items-center justify-between">
-        <h5 class="m-0">Latency Test Results</h5>
+        <strong>Latency</strong>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th *ngFor="let col of columnsLatency">{{ col.header }}</th>
+        <th *ngFor="let col of columnsLatency">
+          <div class="text-center">
+            {{ col.header }}
+          </div>
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-latency>
       <tr>
-        <td *ngFor="let col of columnsLatency">{{ latency[col.field] }}</td>
+        <td *ngFor="let col of columnsLatency">
+          <div class="text-center">
+            {{ latency[col.field] }}
+            {{ col.suffix }}
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>

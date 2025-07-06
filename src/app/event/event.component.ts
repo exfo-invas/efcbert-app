@@ -1,19 +1,19 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss',
-  standalone: false,
+  standalone: false
 })
 export class EventComponent {
 
   columns = [
-    { field: 'fcRate' , header: 'FC Rate' },
-    { field: 'frameSize', header: 'Frame Size' },
-    { field: 'throughputRate' , header: 'Throughput rate' },
-    { field: 'lineRate' , header: 'Measure line rate' },
-    { field: 'measuredRate' , header: 'Measure rate' }
+    { field: 'fcRate' , header: 'FC Rate' , suffix: 'Gbps' },
+    { field: 'frameSize', header: 'Frame Size' , suffix: 'Bytes' },
+    { field: 'throughputRate' , header: 'Throughput rate' , suffix: 'Gbps' },
+    { field: 'lineRate' , header: 'Measure line rate' , suffix: 'Gbps' },
+    { field: 'measuredRate' , header: 'Measure rate' , suffix: 'Gbps' }
   ];
 
   throughPuts: any[] = [{
@@ -25,12 +25,12 @@ export class EventComponent {
   }];
 
   columnsFramesLoss = [
-    { field: 'fcRate' , header: 'FC Rate' },
-    { field: 'frameSize', header: 'Frame Size' },
-    { field: 'fullLineRate' , header: 'Full Line rate' },
-    { field: 'framesSecs' , header: 'Frames/sec' },
-    { field: 'framesLost' , header: 'Frames Lost' },
-    { field: 'frameLossRate' , header: 'Frame loss rate in %'}
+    { field: 'fcRate', header: 'FC Rate', suffix: 'Gbps' },
+    { field: 'frameSize', header: 'Frame Size' , suffix: 'Bytes' },
+    { field: 'fullLineRate', header: 'Full Line rate' , suffix: 'Gbps' },
+    { field: 'framesSecs', header: 'Frames/sec' , suffix: 'Frames/sec' },
+    { field: 'framesLost', header: 'Frames Lost' , suffix: 'Frames' },
+    { field: 'frameLossRate', header: 'Frame loss percent' , suffix: '%' }
   ];
 
   frameLosses: any[] = [{
@@ -43,12 +43,12 @@ export class EventComponent {
   }];
 
   columnsLatency = [
-    { field: 'fcRate' , header: 'FC Rate' },
-    { field: 'frameSize', header: 'Frame Size' },
-    { field: 'measuredLineRate' , header: 'Measure Line Rate -Gbps' },
-    { field: 'measuredPerCent' , header: 'Measured % Line Rate -Gbps' },
-    { field: 'latencyRtd' , header: 'Latency RTD (us)' },
-    { field: 'MeasuredFrameSec' , header: 'Measured rate Frames/sec' }
+    { field: 'fcRate', header: 'FC Rate' , suffix: 'Gbps' },
+    { field: 'frameSize', header: 'Frame Size' , suffix: 'Bytes' },
+    { field: 'measuredLineRate', header: 'Measure Line Rate -Gbps' , suffix: 'Gbps' },
+    { field: 'measuredPerCent', header: 'Measured % Line Rate -Gbps' , suffix: '%' },
+    { field: 'latencyRtd', header: 'Latency RTD (us)' , suffix: 'us' },
+    { field: 'MeasuredFrameSec', header: 'Measured rate Frames/sec' , suffix: 'Frames/sec' }
   ];
 
   latencies: any[] = [{
@@ -60,6 +60,6 @@ export class EventComponent {
     MeasuredFrameSec: 0
   }];
 
-  constructor() {}
+  constructor() { }
 
 }
