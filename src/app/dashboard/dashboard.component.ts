@@ -1,8 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService} from "../service/api.service";
-import {ConnectionTCP} from "../service/api.service.model";
-import {DashboardModel} from "./dashboard.model";
-import {ConnectionService} from "../service/connection.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -11,15 +7,8 @@ import {ConnectionService} from "../service/connection.service";
   standalone: false,
 })
 export class DashboardComponent implements OnInit {
-  title = 'efcbert-app';
-  ipAddress: string = '';
-  portNum: string = '';
-  reponseData: ConnectionTCP = new ConnectionTCP();
-  connStatus: boolean;
-  isNew: boolean = false;
+  isNew: boolean = true;
   command: string;
-  commandResponse: string = "";
-  dashboardData: DashboardModel[];
 
   portB1Columns = [
     { field: 'fcRateSet', header: 'FC Rate Set' },
@@ -71,44 +60,11 @@ export class DashboardComponent implements OnInit {
     trafficShaping: ''
   };
 
-  constructor(private apiService: ApiService, private connectionService :ConnectionService) {
-    this.default();
+  constructor() {
   }
 
   ngOnInit() {
-    this.isNew = !this.connectionService.getStatus();
   }
 
-  getConnection() {
-    this.apiService.get(this.ipAddress, this.portNum).subscribe((data: ConnectionTCP) => {
-      console.log(data);
-      this.isNew = true;
-      this.connStatus = data.status;
-      this.reponseData = data;
-    });
-  }
-
-  executeCommand() {
-    this.apiService.executeCommand(this.command).subscribe((data: string) => {
-      console.log(data);
-      this.commandResponse = data;
-    });
-  }
-
-  closeConnect() {
-    this.apiService.close().subscribe((data: string) => {
-      console.log(data);
-      if (data === 'true') {
-        this.default();
-      } else {
-        console.log('error closing connection');
-      }
-      return data;
-    });
-  }
-
-  default() {
-    this.isNew = false;
-    this.connStatus = false;
-  }
+  //TODO: Add api service to get Test Config deatils
 }
