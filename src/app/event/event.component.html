@@ -1,81 +1,125 @@
 <div class="main-content">
+  <p-tabView>
+    <p-tabPanel header="Table Set 1">
+      <p-table [value]="tableData" responsiveLayout="scroll">
+        <ng-template #caption>
+          <div class="flex items-center justify-between padding-0">
+            <strong>Service Disruption</strong>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th rowspan="2"> </th>
+            <th>Speed</th>
+            <th>Frame size (Frame Length - bytes)</th>
+            <th>Line Data rate</th>
+            <th>Current Tx Utilization %</th>
+            <th>Throughput</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.type }}</td>
+            <td>{{ row.speed }}</td>
+            <td>{{ row.frameSize }}</td>
+            <td>{{ row.lineDataRate }}</td>
+            <td>{{ row.txUtilization }}</td>
+            <td>{{ row.throughput }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
 
-  <p-table [value]="throughPuts">.
-    <ng-template #caption>
-      <div class="flex items-center justify-between padding-0">
-        <strong>Throughput</strong>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th *ngFor="let col of columns">
-          <div class="text-center">{{ col.header }}</div>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-throughPut>
-      <tr>
-        <td *ngFor="let col of columns">
-          <div class="text-center">
-            {{ throughPut[col.field] }}
-            {{ col.suffix ? col.suffix : '' }}
+      <p-table [value]="tableData" responsiveLayout="scroll">
+        <ng-template #caption>
+          <div class="flex items-center justify-between padding-0">
+            <strong>Traffic</strong>
           </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Type</th>
+            <th>FC Rate</th>
+            <th>Protocol</th>
+            <th>Encoding</th>
+            <th>Actual Throughput (Mbps)</th>
+            <th>Actual Transfer Speed (MB/s)</th>
+            <th>Lines Speed (Gbps)</th>
+            <th>Current Utilization (%)</th>
+            <th>Measured Throughput (Mbps)</th>
+            <th>Transfer Speed (MB/s)</th>
+            <th>Measured Line Speed (Gbps)</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.type }}</td>
+            <td>{{ row.fcRate }}</td>
+            <td>{{ row.protocol }}</td>
+            <td>{{ row.encoding }}</td>
+            <td>{{ row.actualThroughput }}</td>
+            <td>{{ row.actualTransferSpeed }}</td>
+            <td>{{ row.lineSpeed }}</td>
+            <td>{{ row.currentUtilization }}</td>
+            <td>{{ row.measuredThroughput }}</td>
+            <td>{{ row.measuredDataRate }}</td>
+            <td>{{ row.measuredLineSpeed }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
 
-  <p-table [value]="frameLosses">.
-    <ng-template #caption>
-      <div class="flex items-center justify-between">
-        <Strong>Frame Loss</Strong>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th *ngFor="let col of columnsFramesLoss">
-          <div class="text-center">
-            {{ col.header }}
+    <p-tabPanel header="Table Set 2">
+      <p-table [value]="throughPuts">
+        <ng-template #caption>
+          <div class="flex items-center justify-between padding-0">
+            <strong>Throughput</strong>
           </div>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-frameLoss>
-      <tr>
-        <td *ngFor="let col of columnsFramesLoss">
-          <div class="text-center">
-            {{ frameLoss[col.field] }}
-            {{ col.suffix }}
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of columns">
+              <div class="text-center">{{ col.header }}</div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-throughPut>
+          <tr>
+            <td *ngFor="let col of columns">
+              <div class="text-center">
+                {{ throughPut[col.field] }}
+                {{ col.suffix }}
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
 
-  <p-table [value]="latencies">.
-    <ng-template #caption>
-      <div class="flex items-center justify-between">
-        <strong>Latency</strong>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th *ngFor="let col of columnsLatency">
-          <div class="text-center">
-            {{ col.header }}
+      <p-table [value]="frameLosses">
+        <ng-template #caption>
+          <div class="flex items-center justify-between">
+            <Strong>Frame Loss</Strong>
           </div>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-latency>
-      <tr>
-        <td *ngFor="let col of columnsLatency">
-          <div class="text-center">
-            {{ latency[col.field] }}
-            {{ col.suffix }}
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of columnsFramesLoss">
+              <div class="text-center">
+                {{ col.header }}
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-frameLoss>
+          <tr>
+            <td *ngFor="let col of columnsFramesLoss">
+              <div class="text-center">
+                {{ frameLoss[col.field] }}
+                {{ col.suffix }}
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+  </p-tabView>
 </div>

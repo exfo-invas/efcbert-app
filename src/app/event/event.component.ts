@@ -1,5 +1,14 @@
 import { Component } from '@angular/core';
 
+interface DataRow {
+  type: string;
+  speed: string;
+  frameSize: string;
+  lineDataRate: string;
+  txUtilization: string;
+  throughput: string;
+}
+
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
@@ -42,23 +51,24 @@ export class EventComponent {
     frameLossRate: 0
   }];
 
-  columnsLatency = [
-    { field: 'fcRate', header: 'FC Rate' , suffix: 'Gbps' },
-    { field: 'frameSize', header: 'Frame Size' , suffix: 'Bytes' },
-    { field: 'measuredLineRate', header: 'Measure Line Rate -Gbps' , suffix: 'Gbps' },
-    { field: 'measuredPerCent', header: 'Measured % Line Rate -Gbps' , suffix: '%' },
-    { field: 'latencyRtd', header: 'Latency RTD (us)' , suffix: 'us' },
-    { field: 'MeasuredFrameSec', header: 'Measured rate Frames/sec' , suffix: 'Frames/sec' }
+  tableData: DataRow[] = [
+    {
+      type: 'Tx',
+      speed: '1X (850Mbps)',
+      frameSize: 'LINS1:SOUR:DATA:TEL:FIB:STR:SIZE?',
+      lineDataRate: 'Cal Table',
+      txUtilization: 'Command TX',
+      throughput: 'Cal Table',
+    },
+    {
+      type: 'Rx',
+      speed: '1X (850Mbps)',
+      frameSize: 'LINS1:SOUR:DATA:TEL:FIB:STR:SIZE?',
+      lineDataRate: 'Cal Table',
+      txUtilization: 'Command RX',
+      throughput: 'Cal Table',
+    },
   ];
-
-  latencies: any[] = [{
-    fcRate: 0,
-    frameSize: 0,
-    measuredLineRate: 10,
-    measuredPerCent: 0,
-    latencyRtd: 0,
-    MeasuredFrameSec: 0
-  }];
 
   constructor() { }
 
