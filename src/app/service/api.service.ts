@@ -75,33 +75,11 @@ export class ApiService {
 
   // Methods to get service disruption, traffic disruption, throughput, and frame loss data
   // Executions Tab
-  getServiceDisruption() {
-    const path = '/telnet/send/service/disruption';
+  getEventDetails() {
+    const path = '/event/disruptions';
     const url = this.baseUrl + path;
     console.log(url);
     return this.http.get(url, {responseType: 'json'});
   }
-
-  getTrafficDisruption() {
-    const path = '/telnet/traffic/disruption';
-    const url = this.baseUrl + path;
-    console.log(url);
-    return this.http.get(url, {responseType: 'json'});
-  }
-
-  getThroughput(){
-    const path = '/telnet/throughput';
-    const url = this.baseUrl + path;
-    console.log(url);
-    return this.http.get(url, {responseType: 'json'});
-  }
-
-  getFrameLoss(){
-    const path = '/telnet/frame/loss';
-    const url = this.baseUrl + path;
-    console.log(url);
-    return this.http.get(url, {responseType: 'json'});
-  }
-
 
 }
