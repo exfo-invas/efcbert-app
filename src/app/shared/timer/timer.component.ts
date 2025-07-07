@@ -17,6 +17,16 @@ export class TimerComponent implements OnInit {
 
   @Input() eventStart: boolean = false;
 
+  ngOnChanges() {
+    if (this.eventStart) {
+      this.startTimer();
+    } else {
+      this.stopTimer();
+      this.currentTimer = '00:00:00';
+      this.timerSeconds = 0;
+    }
+  }
+
   ngOnInit() {
     // Initialize the timer if needed
 
