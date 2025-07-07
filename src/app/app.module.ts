@@ -31,6 +31,7 @@ import {MegaMenu} from "primeng/megamenu";
 import {Ripple} from "primeng/ripple";
 import {Skeleton} from "primeng/skeleton";
 import { TimerComponent } from "./shared/timer/timer.component";
+import {TabPanel, TabView} from "primeng/tabview";
 
 @NgModule({
   declarations: [
@@ -63,8 +64,10 @@ import { TimerComponent } from "./shared/timer/timer.component";
     MegaMenu,
     Ripple,
     Skeleton,
-    TimerComponent
-],
+    TimerComponent,
+    TabView,
+    TabPanel
+  ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
