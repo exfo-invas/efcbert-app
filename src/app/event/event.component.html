@@ -1,7 +1,7 @@
 <div class="main-content">
   <p-tabView>
-    <p-tabPanel header="Table Set 1">
-      <p-table [value]="tableData" responsiveLayout="scroll">
+    <p-tabPanel header="Calculation Set 1">
+      <p-table [value]="serviceDisruptions" responsiveLayout="scroll">
         <ng-template #caption>
           <div class="flex items-center justify-between padding-0">
             <strong>Service Disruption</strong>
@@ -9,7 +9,7 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th rowspan="2"> </th>
+            <th rowspan="2"></th>
             <th>Speed</th>
             <th>Frame size (Frame Length - bytes)</th>
             <th>Line Data rate</th>
@@ -29,7 +29,7 @@
         </ng-template>
       </p-table>
 
-      <p-table [value]="tableData" responsiveLayout="scroll">
+      <p-table [value]="trafficDisruptions" responsiveLayout="scroll">
         <ng-template #caption>
           <div class="flex items-center justify-between padding-0">
             <strong>Traffic</strong>
@@ -61,14 +61,14 @@
             <td>{{ row.lineSpeed }}</td>
             <td>{{ row.currentUtilization }}</td>
             <td>{{ row.measuredThroughput }}</td>
-            <td>{{ row.measuredDataRate }}</td>
+            <td>{{ row.transferSpeed }}</td>
             <td>{{ row.measuredLineSpeed }}</td>
           </tr>
         </ng-template>
       </p-table>
     </p-tabPanel>
 
-    <p-tabPanel header="Table Set 2">
+    <p-tabPanel header="Calculation Set 2">
       <p-table [value]="throughPuts">
         <ng-template #caption>
           <div class="flex items-center justify-between padding-0">
@@ -77,19 +77,22 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th *ngFor="let col of columns">
-              <div class="text-center">{{ col.header }}</div>
-            </th>
+            <th>Type</th>
+            <th>FC Rate</th>
+            <th>Frame size</th>
+            <th>Full line rate</th>
+            <th>Measure rate (Frames/sec)</th>
+            <th>Frames loss rate (%)</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-throughPut>
           <tr>
-            <td *ngFor="let col of columns">
-              <div class="text-center">
-                {{ throughPut[col.field] }}
-                {{ col.suffix }}
-              </div>
-            </td>
+            <td>{{ throughPut.type }}</td>
+            <td>{{ throughPut.fcRate }}</td>
+            <td>{{ throughPut.frameSize }}</td>
+            <td>{{ throughPut.fullLineRate }}</td>
+            <td>{{ throughPut.measureRate }}</td>
+            <td>{{ throughPut.framesLossRate }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -102,21 +105,18 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th *ngFor="let col of columnsFramesLoss">
-              <div class="text-center">
-                {{ col.header }}
-              </div>
-            </th>
+            <th>Type</th>
+            <th>Frame Rate</th>
+            <th>Total no.of bytes transmitted</th>
+            <th>Frames Transmitted</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-frameLoss>
           <tr>
-            <td *ngFor="let col of columnsFramesLoss">
-              <div class="text-center">
-                {{ frameLoss[col.field] }}
-                {{ col.suffix }}
-              </div>
-            </td>
+            <td>{{ frameLoss.type }}</td>
+            <td>{{ frameLoss.frameRate }}</td>
+            <td>{{ frameLoss.totalTransmittedBytes }}</td>
+            <td>{{ frameLoss.framesTransmitted }}</td>
           </tr>
         </ng-template>
       </p-table>
