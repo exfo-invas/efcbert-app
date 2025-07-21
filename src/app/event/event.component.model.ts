@@ -1,53 +1,52 @@
 export class EventDisruptions {
-  service: ServiceDisruptions[];
+  frameLoss: FrameLossResponse[];
   traffic: TrafficResponse[];
 }
 
-export class EventThroughput {
-  throughput: ThroughputResponse[];
-  frameLoss: FrameLossResponse[];
-}
-
-export class EventDetails {
-  EventDisruptions: EventDisruptions;
-  EventThroughput: EventThroughput;
-}
-
-export class ServiceDisruptions {
-  type: string;
-  speed: string;
-  frameSize: string;
-  lineDataRate: string;
-  txUtilization: string;
-  throughput: string;
+export class FrameLossResponse {
+  fcRate: string;
+  txCount: number;
+  rxCount: number;
+  lostFrames: number;
+  frameLossRate: number;
 }
 
 export class TrafficResponse {
   type: string;
   fcRate: string;
-  protocol: string;
-  encoding: string;
-  actualThroughput: string;
-  actualTransferSpeed: string;
-  lineSpeed: string;
-  currentUtilization: string;
-  measuredThroughput: string;
-  transferSpeed: string;
-  measuredLineSpeed: string;
+  actualThroughput: number;
+  actualTransferSpeed: number;
+  lineSpeed: number;
+  currentUtilization: number;
+  measuredThroughput: number;
+  transferSpeed: number;
+  measuredLineSpeed: number;
 }
 
-export class ThroughputResponse {
-  type: string;
-  fcRate: string;
-  frameSize: string;
-  fullLineRate: string;
-  measureRate: string;
-  framesLossRate: string;
-}
+// export class EventThroughput {
+//   throughput: ThroughputResponse[];
+//   service: ServiceDisruptions[];
+// }
 
-export class FrameLossResponse {
-  type: string;
-  frameRate: string;
-  totalTransmittedBytes: string;
-  framesTransmitted: string;
-}
+// export class EventDetails {
+//   EventDisruptions: EventDisruptions;
+//   EventThroughput: EventThroughput;
+// }
+
+// export class ServiceDisruptions {
+//   type: string;
+//   speed: string;
+//   frameSize: string;
+//   lineDataRate: string;
+//   txUtilization: string;
+//   throughput: string;
+// }
+
+// export class ThroughputResponse {
+//   type: string;
+//   fcRate: string;
+//   frameSize: string;
+//   fullLineRate: string;
+//   measureRate: string;
+//   framesLossRate: string;
+// }

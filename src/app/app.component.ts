@@ -3,6 +3,7 @@ import { MegaMenuItem } from "primeng/api";
 import { ApiService } from './service/api.service';
 import { ConnectionService } from './service/connection.service';
 import { Router } from '@angular/router';
+import { LoggingService } from './logging/logging.service';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,7 @@ export class AppComponent implements OnInit {
   ipv4: string;
   ipv6: string[];
 
-  constructor(private apiService: ApiService, private connectionService: ConnectionService, private router: Router) {
+  constructor(private apiService: ApiService, private connectionService: ConnectionService, private router: Router, private loggingService: LoggingService) {
     this.getIPs();
   }
 
@@ -81,6 +82,7 @@ export class AppComponent implements OnInit {
 
   logingResponse(event: { ip: string, port: string }) {
     console.log('Login successful with IP:', event.ip, 'and Port:', event.port);
+    this.loggingService.addLog(`Login successful with IP: ${event.ip} and Port: ${event.port}`);
     this.connStatus = true; // Update connection status to true
     this.openLogin = false;
     this.suiteConn = true; // Enable the button after a successful login
@@ -94,6 +96,8 @@ export class AppComponent implements OnInit {
         console.log('Event started successfully:', data);
         // You can add additional logic here if needed after starting the event
         if (data === 'Connection established') {
+          sessionStorage.setItem('eventStarted', 'true'); // Store event started status
+          this.loggingService.addLog('Test Event started successfully');
           this.connStatus = true; // Update connection status to true
           this.suiteConn = true; // Enable the button after starting the event
           this.testStarted = true; // Set testStarted to true after starting the event
@@ -116,8 +120,10 @@ export class AppComponent implements OnInit {
     this.apiService.eventHandler(false).subscribe({
       next: (data: any) => {
         console.log('Event stopped successfully:', data);
+        sessionStorage.removeItem('eventStarted'); // Remove event started status
         this.testStarted = false; // Reset testStarted to false after stopping the event
         this.trimerEvent = false; // Reset the timer event flag to false
+        this.loggingService.addLog('Test Event stopped successfully');
       },
       error: (error) => {
         console.error('Error stopping event:', error);

@@ -7,14 +7,14 @@
           <td class="initial-tr">
           </td>
         </tr>
-        <tr class="initial-tr" *ngFor="let col of portB1Columns">
+        <tr class="initial-tr" *ngFor="let col of physicalColumns">
           <td>{{ col.header }}</td>
           <td>:</td>
           <td *ngIf="isNew">
             <p-skeleton width="5rem" styleClass="mb-2" />
           </td>
           <td *ngIf="!isNew">
-            {{ portB1Data[col.field] }}
+            {{ physicalColumns[col.field] }}
           </td>
         </tr>
       </table>
@@ -45,6 +45,13 @@
           </td>
           <td *ngIf="!isNew">{{ deviceConfigData[col.field] }}</td>
         </tr>
+        <tr class="initial-tr">
+          <td>PSP Link</td>
+          <td>:</td>
+          <td *ngIf="isNew">
+            <p-skeleton width="5rem" styleClass="mb-2" />
+          </td>
+          <td *ngIf="!isNew">{{ pspLink }}</td>
       </table>
     </p-card>
   </div>

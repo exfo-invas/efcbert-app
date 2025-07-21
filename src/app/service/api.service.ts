@@ -10,13 +10,12 @@ import {HttpClient} from '@angular/common/http';
 
 export class ApiService {
 
-
   constructor(private http: HttpClient) {
   }
 
   baseUrl = 'http://localhost:8080';
 
-  contextService = 'telnet';
+  telnetContext = 'telnet';
 
   //method to send http request to the server
   public get(url: string, port: any) {
@@ -29,7 +28,7 @@ export class ApiService {
 
 
   public getIPs() {
-    const url = this.baseUrl + '/' + this.contextService + '/ip';
+    const url = this.baseUrl + '/' + this.telnetContext + '/ip';
     console.log(url);
     return this.http.get(url, {responseType: 'json'});
   }
@@ -37,7 +36,7 @@ export class ApiService {
 
   executeCommand(command: string) {
 
-    const url = this.baseUrl + '/' + this.contextService + '/send';
+    const url = this.baseUrl + '/' + this.telnetContext + '/send';
 
     console.log(url);
 
@@ -46,7 +45,7 @@ export class ApiService {
   }
 
   close() {
-    const url = this.baseUrl + '/' + this.contextService + '/disconnect';
+    const url = this.baseUrl + '/' + this.telnetContext + '/disconnect';
 
     console.log(url);
 
@@ -54,10 +53,17 @@ export class ApiService {
   }
 
   status() {
-    const url = this.baseUrl + '/' + this.contextService + '/status';
+    const url = this.baseUrl + '/' + this.telnetContext + '/status';
     console.log(url);
     return this.http.get(url, {responseType: 'text'});
   }
+
+  getStatus() {
+    const url = this.baseUrl + '/' + 'config/status/full';
+    console.log(url);
+    return this.http.get(url, {responseType: 'json'});
+  }
+
 
   eventHandler(toggle:boolean) {
     const path = '/config/test/{toggle}';
@@ -76,7 +82,7 @@ export class ApiService {
   // Methods to get service disruption, traffic disruption, throughput, and frame loss data
   // Executions Tab
   getEventDetails() {
-    const path = '/event/disruptions';
+    const path = '/event/details';
     const url = this.baseUrl + path;
     console.log(url);
     return this.http.get(url, {responseType: 'json'});

@@ -1,5 +1,64 @@
 <div class="main-content">
-  <p-tabView>
+  <p-table [value]="trafficDisruptions" responsiveLayout="scroll">
+    <ng-template #caption>
+      <div class="flex items-center justify-between padding-0">
+        <strong>Traffic</strong>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Type</th>
+        <th>FC Rate</th>
+        <th>Actual Throughput (Mbps)</th>
+        <th>Actual Transfer Speed (MB/s)</th>
+        <th>Lines Speed (Gbps)</th>
+        <th>Current Utilization (%)</th>
+        <th>Measured Throughput (Mbps)</th>
+        <th>Transfer Speed (MB/s)</th>
+        <th>Measured Line Speed (Gbps)</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.type }}</td>
+        <td>{{ row.fcRate }}</td>
+        <td>{{ row.actualThroughput }}</td>
+        <td>{{ row.actualTransferSpeed }}</td>
+        <td>{{ row.lineSpeed }}</td>
+        <td>{{ row.currentUtilization }}</td>
+        <td>{{ row.measuredThroughput }}</td>
+        <td>{{ row.transferSpeed }}</td>
+        <td>{{ row.measuredLineSpeed }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-table [value]="frameLosses">
+    <ng-template #caption>
+      <div class="flex items-center justify-between">
+        <Strong>Frame Loss</Strong>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>FC Rate</th>
+        <th>Tx Frame Count</th>
+        <th>Rx Frame Count</th>
+        <th>Number Lost Frames</th>
+        <th>Frame Loss Rate (%)</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-frameLoss>
+      <tr>
+        <td>{{ frameLoss.fcRate }}</td>
+        <td>{{ frameLoss.txCount }}</td>
+        <td>{{ frameLoss.rxCount }}</td>
+        <td>{{ frameLoss.lostFrames }}</td>
+        <td>{{ frameLoss.frameLossRate }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <!-- <p-tabView>
     <p-tabPanel header="Calculation Set 1">
       <p-table [value]="serviceDisruptions" responsiveLayout="scroll">
         <ng-template #caption>
@@ -121,5 +180,5 @@
         </ng-template>
       </p-table>
     </p-tabPanel>
-  </p-tabView>
+  </p-tabView> -->
 </div>

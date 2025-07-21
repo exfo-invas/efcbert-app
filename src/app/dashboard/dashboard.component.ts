@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import { ApiService } from '../service/api.service';
+import { LoggingService } from '../logging/logging.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,61 +12,74 @@ export class DashboardComponent implements OnInit {
   isNew: boolean = true;
   command: string;
 
-  portB1Columns = [
-    { field: 'fcRateSet', header: 'FC Rate Set' },
+  pspLink: string = "";
+
+  physicalColumns = [
+    { field: 'fcRate', header: 'FC Rate' },
     { field: 'sfpPort', header: 'SFP & Port' },
-    { field: 'linkStatus', header: 'Throughput rate' }
+    { field: 'txPower', header: 'TX Power' },
+    { field: 'rxPower', header: 'RX Power' }
   ];
 
-  portB1Data = {
-    fcRateSet: '',
+  physicalData = {
+    laserStatus: '',
+    fcRate: '',
     sfpPort: '',
-    linkStatus: false
+    txPower: '',
+    rxPower: ''
   };
 
   wwnColumns = [
-    { field: 'source', header: 'Source' },
-    { field: 'destination', header: 'Destination' },
-    { field: 'bufferFlow', header: 'Buffer Flow Control' },
-    { field: 'bbCredit', header: 'Available BB Credit' },
-    { field: 'logging', header: 'logging' },
-    { field: 'topology', header: 'Discovered Topology' },
-    { field: 'fbStatus', header: 'Fabric Status' },
-    { field: 'portStatus', header: 'Port Status' }
+    { field: 'flowControl', header: 'Buffer Flow Control' },
+    { field: 'bufferCredit', header: 'Available BB Credit' },
+    { field: 'loging', header: 'logging' }
   ];
 
   wwnData = {
-    source: '',
-    destination: '',
-    bufferFlow: '',
-    bbCredit: '',
-    logging: '',
-    topology: '',
-    fbStatus: '',
-    portStatus: ''
+    flowControl: '',
+    bufferCredit: '',
+    loging: ''
   };
 
   deviceConfigColumns = [
-    { field: 'pattern', header: 'Device Name' },
-    { field: 'txPattern', header: 'Device Type' },
-    { field: 'rxPattern', header: 'Firmware Version' },
-    { field: 'fcFrameSize', header: 'Serial Number' },
-    { field: 'trafficShaping', header: 'trafficShaping' }
+    { field: 'coupled', header: 'Coupled' },
+    { field: 'txPattern', header: 'TX Pattern' },
+    { field: 'rxPattern', header: 'RX Pattern' },
+    { field: 'fcFrameSize', header: 'FC Frame Size' },
+    { field: 'trafficShaping', header: 'Traffic Shaping' }
   ];
 
   deviceConfigData = {
-    pattern: '',
+    coupled: '',
     txPattern: '',
     rxPattern: '',
     fcFrameSize: '',
     trafficShaping: ''
   };
 
-  constructor() {
+  constructor(private apiService: ApiService, private loggingService: LoggingService) {
+    this.getFullStatusData();
   }
 
   ngOnInit() {
+    this.getFullStatusData();
   }
 
-  //TODO: Add api service to get Test Config deatils
+  getFullStatusData() {
+    this.apiService.getStatus().subscribe((data: any) => {
+      if (data) {
+        this.isNew = false;
+        this.physicalData = data.physicalStatus;
+        this.wwnData = data.portStatus;
+        this.deviceConfigData = data.toolStatus;
+        this.pspLink = data.pspLinkStatus || '';
+        this.loggingService.addLog('Full status data fetched successfully');
+      } else {
+        this.isNew = true;
+      }
+    }, error => {
+      console.error('Error fetching full status data:', error);
+      this.isNew = true;
+    });
+  }
 }
