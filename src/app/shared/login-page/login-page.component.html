@@ -17,9 +17,9 @@
     </p-card>
   </div>
 </div>-->
-
 <div>
-  <p-dialog header="Connect to FCBERT Test Engine" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem', height: '20rem' }">
+  <p-dialog header="Connect to FCBERT Test Engine" [modal]="true" [(visible)]="visible" [closable]="true" (onHide)="onDialogHide()"
+    [style]="{ width: '35rem', height: '25rem' }">
     <div class="dialog-content">
       <div class="dialog-form-content">
         <table>
@@ -33,7 +33,8 @@
           </tr>
           <tr>
             <td><label for="port">Port: </label></td>
-            <td><input pInputText id="port" [(ngModel)]="port"/></td>
+            <td><input pInputText id="port" [(ngModel)]="port" /></td>
+            <p-button (click)="getIpList()" icon="pi pi-refresh" class="p-button-secondary" />
           </tr>
         </table>
         <div class="button-p-card">

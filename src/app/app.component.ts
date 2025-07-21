@@ -55,8 +55,8 @@ export class AppComponent implements OnInit {
     }, 300000); // 300000 ms = 5 minutes
   }
 
-  openLoginDialog() {
-    this.openLogin = true;
+  openLoginDialog(dialog: boolean) {
+    this.openLogin = dialog;
   }
 
   getIPs() {

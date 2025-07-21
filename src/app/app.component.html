@@ -26,8 +26,8 @@
         <app-timer [eventStart]="trimerEvent"></app-timer>
       </div>
       <div class="nav-buttons">
-        <p-button *ngIf="!suiteConn" label="Connect to test suite" (onClick)="openLoginDialog()" />
-        <app-login-page [visible]="openLogin" (loginSuccess)="logingResponse($event)"></app-login-page>
+        <p-button *ngIf="!suiteConn" label="Connect to test suite" (onClick)="openLoginDialog(true)" />
+        <app-login-page [visible]="openLogin" (loginSuccess)="logingResponse($event)" (loginFailed)="openLoginDialog($event)"></app-login-page>
         <p-button *ngIf="suiteConn" [disabled]=testStarted [loading]=isLoading label="Start" icon="pi pi-forward"
           iconPos="left" (onClick)="startEvent()" />
         <p-button *ngIf="suiteConn" [disabled]="!suiteConn || !testStarted" [loading]="isLoading" label="Stop"
