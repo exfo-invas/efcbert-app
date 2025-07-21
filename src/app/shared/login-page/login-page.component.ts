@@ -5,7 +5,6 @@ import { InputText } from "primeng/inputtext";
 import { ConnectionTCP } from "../../service/api.service.model";
 import { ApiService } from "../../service/api.service";
 import { ConnectionService } from "../../service/connection.service";
-import { ActivatedRoute } from "@angular/router";
 import { Dialog } from "primeng/dialog";
 import { ProgressBar } from "primeng/progressbar";
 import { NgIf } from "@angular/common";
@@ -45,6 +44,10 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getIpList();
+  }
+
+  getIpList(){
     const ipv6List = sessionStorage.getItem('ipv6') ? JSON.parse(sessionStorage.getItem('ipv6')) : [];
     const ipv4 = sessionStorage.getItem('ipv4');
     if (ipv4) {
@@ -73,10 +76,6 @@ export class LoginPageComponent implements OnInit {
       this.isLoading = false;
       this.errorMessage = 'An error occurred while trying to connect. Please try again later.';
     });
-  }
-
-  getIpList() {
-    this.getConnection();
   }
 
   onDialogHide() {
