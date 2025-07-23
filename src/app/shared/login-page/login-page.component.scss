@@ -1,6 +1,6 @@
 .main-content {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   height: 50vh;
   align-items: center;
 }
@@ -11,11 +11,13 @@
   gap: 1em;
   flex-wrap: wrap;
   align-items: baseline;
+  justify-content: flex-start;
 }
 
 .dialog-content {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   gap: 1em;
 }
 
@@ -24,5 +26,5 @@
   flex-direction: column;
   gap: 1em;
   flex-wrap: wrap;
-  align-items: center;
+  justify-content: flex-start;
 }

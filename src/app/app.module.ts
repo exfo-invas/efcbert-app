@@ -10,7 +10,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 import {EventComponent} from "./event/event.component";
 import {providePrimeNG} from "primeng/config";
-import Aura from "@primeng/themes/aura";
+import Material from "@primeng/themes/material";
 import {InputText} from "primeng/inputtext";
 import {Card} from "primeng/card";
 import {TableModule} from "primeng/table";
@@ -29,6 +29,9 @@ import {Divider} from "primeng/divider";
 import {Menu} from "primeng/menu";
 import {MegaMenu} from "primeng/megamenu";
 import {Ripple} from "primeng/ripple";
+import {Skeleton} from "primeng/skeleton";
+import { TimerComponent } from "./shared/timer/timer.component";
+import {TabPanel, TabView} from "primeng/tabview";
 
 @NgModule({
   declarations: [
@@ -60,6 +63,10 @@ import {Ripple} from "primeng/ripple";
     Menu,
     MegaMenu,
     Ripple,
+    Skeleton,
+    TimerComponent,
+    TabView,
+    TabPanel
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
@@ -67,7 +74,7 @@ import {Ripple} from "primeng/ripple";
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: Material,
         options: {
           darkModeSelector: false
         }

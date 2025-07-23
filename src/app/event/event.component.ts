@@ -1,65 +1,164 @@
-import {Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FrameLossResponse, TrafficResponse } from './event.component.model';
+import {EventStatusService} from "../service/eventStatus.service";
 
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss',
-  standalone: false,
+  standalone: false
 })
-export class EventComponent {
+export class EventComponent implements OnInit {
 
-  columns = [
-    { field: 'fcRate' , header: 'FC Rate' },
-    { field: 'frameSize', header: 'Frame Size' },
-    { field: 'throughputRate' , header: 'Throughput rate' },
-    { field: 'lineRate' , header: 'Measure line rate' },
-    { field: 'measuredRate' , header: 'Measure rate' }
+  trafficDisruptions: TrafficResponse[] = [
+    {
+      type: 'Tx',
+      fcRate: '-',
+      actualThroughput: 0,
+      actualTransferSpeed: 0,
+      lineSpeed: 0,
+      currentUtilization: 0,
+      measuredThroughput: 0,
+      transferSpeed: 0,
+      measuredLineSpeed: 0
+    },
+    {
+      type: 'Rx',
+      fcRate: '-',
+      actualThroughput: 0,
+      actualTransferSpeed: 0,
+      lineSpeed: 0,
+      currentUtilization: 0,
+      measuredThroughput: 0,
+      transferSpeed: 0,
+      measuredLineSpeed: 0
+    }
   ];
 
-  throughPuts: any[] = [{
-    fcRate: 0,
-    frameSize: 0,
-    throughputRate: 10,
-    lineRate: 0,
-    measuredRate: 0
-  }];
+  frameLosses: FrameLossResponse[] = [
+    {
+      fcRate: '1x',
+      txCount: 0,
+      rxCount: 0,
+      lostFrames: 0,
+      frameLossRate: 0
+    }
+  ]
 
-  columnsFramesLoss = [
-    { field: 'fcRate' , header: 'FC Rate' },
-    { field: 'frameSize', header: 'Frame Size' },
-    { field: 'fullLineRate' , header: 'Full Line rate' },
-    { field: 'framesSecs' , header: 'Frames/sec' },
-    { field: 'framesLost' , header: 'Frames Lost' },
-    { field: 'frameLossRate' , header: 'Frame loss rate in %'}
-  ];
+  constructor(private eventStatus: EventStatusService) {
+  }
 
-  frameLosses: any[] = [{
-    fcRate: 0,
-    frameSize: 0,
-    fullLineRate: 10,
-    framesSecs: 0,
-    framesLost: 0,
-    frameLossRate: 0
-  }];
+  //Every Second, fetch the latest data for throughput, frame loss, service disruption, and traffic disruption
+  ngOnInit(): void {
+    this.eventStatus.getEventDetails();
 
-  columnsLatency = [
-    { field: 'fcRate' , header: 'FC Rate' },
-    { field: 'frameSize', header: 'Frame Size' },
-    { field: 'measuredLineRate' , header: 'Measure Line Rate -Gbps' },
-    { field: 'measuredPerCent' , header: 'Measured % Line Rate -Gbps' },
-    { field: 'latencyRtd' , header: 'Latency RTD (us)' },
-    { field: 'MeasuredFrameSec' , header: 'Measured rate Frames/sec' }
-  ];
+    if (this.eventStatus.getEventStatus()) {
+      setInterval(() => {
+        console.log('Fetching event details...');
+        this.eventStatus.getEventDetails();
+        console.log('Event details skipped as event is not started.');
+      }, 10000); // 10000 ms = 10 seconds
+    }
+  }
 
-  latencies: any[] = [{
-    fcRate: 0,
-    frameSize: 0,
-    measuredLineRate: 10,
-    measuredPerCent: 0,
-    latencyRtd: 0,
-    MeasuredFrameSec: 0
-  }];
-
-  constructor() {}
-
+  // getEventDetails(): void {
+  //   this.apiService.getEventDetails().subscribe({
+  //     next: (response: EventDisruptions) => {
+  //       console.log(`Event disruptions data for :`, response);
+  //       this.getEventDisruptions(response);
+  //       this.loggingService.addLog(`Event disruptions data fetched successfully`);
+  //     },
+  //     error: (error) => {
+  //       console.error(`Error fetching event disruptions data for:`, error);
+  //     }
+  //   });
+  // }
+  //
+  // private getEventDisruptions(disruption: EventDisruptions): void {
+  //   this.getFrameLoss(disruption.frameLoss);
+  //   this.getTrafficDisruption(disruption.traffic);
+  // }
+  //
+  // private getTrafficDisruption(response: TrafficResponse[]): void {
+  //   if (response && response.length > 0) {
+  //     response.forEach((disruption) => {
+  //       const index = disruption.type.toLowerCase() === 'tx' ? 0 : 1;
+  //       if (this.trafficDisruptions[index]) {
+  //         Object.assign(this.trafficDisruptions[index], disruption);
+  //       }
+  //     });
+  //   }
+  // }
+  //
+  // private getFrameLoss(response: FrameLossResponse[]): void {
+  //   Object.assign(this.frameLosses[0], response);
+  // }
 }
+
+
+
+//Backup of additional tables
+// throughPuts: ThroughputResponse[] = [
+//   {
+//     type: 'Tx',
+//     fcRate: '-',
+//     frameSize: '-',
+//     fullLineRate: '-',
+//     measureRate: '-',
+//     framesLossRate: '-'
+//   },
+//   {
+//     type: 'Rx',
+//     fcRate: '-',
+//     frameSize: '-',
+//     fullLineRate: '-',
+//     measureRate: '-',
+//     framesLossRate: '-'
+//   }];
+
+// serviceDisruptions: ServiceDisruptions[] = [
+//   {
+//     type: 'Tx',
+//     speed: '-',
+//     frameSize: '-',
+//     lineDataRate: '-',
+//     txUtilization: '-',
+//     throughput: '-'
+//   },
+//   {
+//     type: 'Rx',
+//     speed: '-',
+//     frameSize: '-',
+//     lineDataRate: '-',
+//     txUtilization: '-',
+//     throughput: '-',
+//   },
+// ];
+
+
+// EventThroughput(eventThroughput: EventThroughput): void {
+//   this.getThroughput(eventThroughput.throughput);
+//   this.getServiceDisruptionCommand(eventThroughput.service);
+// }
+
+// getServiceDisruptionCommand(response: ServiceDisruptions[]): void {
+//   if (response && response.length > 0) {
+//     response.forEach((disruption) => {
+//       const index = disruption.type === 'Tx' ? 0 : 1;
+//       if (this.serviceDisruptions[index]) {
+//         Object.assign(this.serviceDisruptions[index], disruption);
+//       }
+//     });
+//   }
+// }
+
+// getThroughput(response: ThroughputResponse[]): void {
+//   if (response && response.length > 0) {
+//     response.forEach((throughput) => {
+//       const index = throughput.type === 'Tx' ? 0 : 1;
+//       if (this.throughPuts[index]) {
+//         Object.assign(this.throughPuts[index], throughput);
+//       }
+//     });
+//   }
+// }

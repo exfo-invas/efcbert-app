@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService} from "../service/api.service";
-import {ConnectionTCP} from "../service/api.service.model";
-import {DashboardModel} from "./dashboard.model";
+import { ApiService } from '../service/api.service';
+import { LoggingService } from '../logging/logging.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,119 +9,77 @@ import {DashboardModel} from "./dashboard.model";
   standalone: false,
 })
 export class DashboardComponent implements OnInit {
-  title = 'efcbert-app';
-  ipAddress: string = '';
-  portNum: string = '';
-  reponseData: ConnectionTCP = new ConnectionTCP();
-  connStatus: boolean;
-  isNew: boolean = false;
+  isNew: boolean = true;
   command: string;
-  commandResponse: string = "";
-  dashboardData: DashboardModel[];
 
-  portB1Columns = [
-    { field: 'fcRateSet', header: 'FC Rate Set' },
+  pspLink: string = "";
+
+  physicalColumns = [
+    { field: 'fcRate', header: 'FC Rate' },
     { field: 'sfpPort', header: 'SFP & Port' },
-    { field: 'linkStatus', header: 'Throughput rate' }
+    { field: 'txPower', header: 'TX Power' },
+    { field: 'rxPower', header: 'RX Power' }
   ];
 
-  portB1Data = {
-    fcRateSet: 123,
-    sfpPort: '0',
-    linkStatus: 'Disconnected'
+  physicalData = {
+    laserStatus: '',
+    fcRate: '',
+    sfpPort: '',
+    txPower: '',
+    rxPower: ''
   };
 
   wwnColumns = [
-    { field: 'source', header: 'Source' },
-    { field: 'destination', header: 'Destination' },
-    { field: 'bufferFlow', header: 'Buffer Flow Control' },
-    { field: 'bbCredit', header: 'Available BB Credit' },
-    { field: 'logging', header: 'logging' },
-    { field: 'topology', header: 'Discovered Topology' },
-    { field: 'fbStatus', header: 'Fabric Status' },
-    { field: 'portStatus', header: 'Port Status' }
+    { field: 'flowControl', header: 'Buffer Flow Control' },
+    { field: 'bufferCredit', header: 'Available BB Credit' },
+    { field: 'loging', header: 'logging' }
   ];
 
   wwnData = {
-    source: '0x1234567890abcdef',
-    destination: '0xabcdef1234567890',
-    bufferFlow: 'Enabled',
-    bbCredit: 255,
-    logging: 'Enabled',
-    topology: 'Full Mesh',
-    fbStatus: 'Active',
-    portStatus: 'Online'
+    flowControl: '',
+    bufferCredit: '',
+    loging: ''
   };
 
   deviceConfigColumns = [
-    { field: 'pattern', header: 'Device Name' },
-    { field: 'txPattern', header: 'Device Type' },
-    { field: 'rxPattern', header: 'Firmware Version' },
-    { field: 'fcFrameSize', header: 'Serial Number' },
-    { field: 'trafficShaping', header: 'trafficShaping' }
+    { field: 'coupled', header: 'Coupled' },
+    { field: 'txPattern', header: 'TX Pattern' },
+    { field: 'rxPattern', header: 'RX Pattern' },
+    { field: 'fcFrameSize', header: 'FC Frame Size' },
+    { field: 'trafficShaping', header: 'Traffic Shaping' }
   ];
 
   deviceConfigData = {
-    pattern: 'EFCBERT-1234',
-    txPattern: 'Type A',
-    rxPattern: 'Type B',
-    fcFrameSize: 2048,
-    trafficShaping: 'Enabled'
+    coupled: '',
+    txPattern: '',
+    rxPattern: '',
+    fcFrameSize: '',
+    trafficShaping: ''
   };
-  isDeviceConnected: boolean = true;
 
-
-
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private loggingService: LoggingService) {
+    this.getFullStatusData();
   }
 
   ngOnInit() {
-    if (this.ipAddress === '' && this.portNum === '') {
-      this.isNew = false;
-    }
-
-    this.dashboardData = [
-      {
-        des: "Interface/Rate",
-        values: '? (1X/2x/3x/4x/8x/16x/32x/64x)'
-      }
-    ]
+    this.getFullStatusData();
   }
 
-  getConnection() {
-    this.apiService.get(this.ipAddress, this.portNum).subscribe((data: ConnectionTCP) => {
-      console.log(data);
-      this.isNew = true;
-      this.connStatus = data.status;
-      this.reponseData = data;
-    });
-  }
-
-  executeCommand() {
-    this.apiService.executeCommand(this.command).subscribe((data: string) => {
-      console.log(data);
-      this.commandResponse = data;
-    });
-  }
-
-  closeConnect() {
-    this.apiService.close().subscribe((data: string) => {
-      console.log(data);
-      if (data === 'true') {
-        this.default();
+  getFullStatusData() {
+    this.apiService.getStatus().subscribe((data: any) => {
+      if (data) {
+        this.isNew = false;
+        this.physicalData = data.physicalStatus;
+        this.wwnData = data.portStatus;
+        this.deviceConfigData = data.toolStatus;
+        this.pspLink = data.pspLinkStatus || '';
+        this.loggingService.addLog('Full status data fetched successfully');
       } else {
-        console.log('error closing connection');
+        this.isNew = true;
       }
-      return data;
+    }, error => {
+      console.error('Error fetching full status data:', error);
+      this.isNew = true;
     });
-  }
-
-  default() {
-    this.ipAddress = '';
-    this.portNum = '';
-    this.isNew = false;
-    this.connStatus = false;
-    this.command = '';
-    this.commandResponse = '';
   }
 }

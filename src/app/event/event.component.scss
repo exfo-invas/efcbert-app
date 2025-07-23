@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 1%;
+  padding: 1%;
 }
 
 .base-form-content {
@@ -18,4 +19,8 @@
   flex-direction: row;
   align-items: baseline;
   gap : 1em;
+}
+
+.text-center {
+  text-align: center;
 }

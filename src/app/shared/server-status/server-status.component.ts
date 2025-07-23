@@ -3,8 +3,6 @@ import {Button} from "primeng/button";
 import {NgIf} from "@angular/common";
 import {Tooltip} from "primeng/tooltip";
 import {Dialog} from "primeng/dialog";
-import {InputText} from "primeng/inputtext";
-import {ConnectionService} from "../../service/connection.service";
 
 @Component({
   selector: 'app-server-status',
@@ -12,21 +10,17 @@ import {ConnectionService} from "../../service/connection.service";
     Button,
     NgIf,
     Tooltip,
-    Dialog,
-    InputText
+    Dialog
   ],
   templateUrl: './server-status.component.html',
   styleUrl: './server-status.component.scss'
 })
 export class ServerStatusComponent implements OnInit {
 
-  constructor(private connectionService: ConnectionService) {
+  constructor() {
   }
 
   ngOnInit() {
-    setInterval(() => {
-      this.connStatus = this.connectionService.getStatus();
-    }, 300000); // 300000 ms = 5 minutes
   }
 
   @Input() connStatus: boolean;
@@ -38,7 +32,4 @@ export class ServerStatusComponent implements OnInit {
   showDialog() {
     this.visible = true;
   }
-
-
-
 }

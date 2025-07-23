@@ -4,7 +4,9 @@
       <img ngSrc="assets/logo/Title-removebg.png" alt="EFCBert Logo" class="logo" height="200" width="500">
     </ng-template>
     <ng-template let-item>
-      <a *ngIf="item.root" pRipple class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 2rem">
+      <a *ngIf="item.root" pRipple
+        class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase"
+        style="border-radius: 2rem">
         <i [ngClass]="item.icon"></i>
         <span class="ml-2">{{ item.label }}</span>
       </a>
@@ -15,32 +17,22 @@
   </p-megaMenu>
 
   <div class="main-content">
-
     <div class="content">
       <router-outlet></router-outlet>
     </div>
 
     <div class="side-nav">
-      <!--<div class="side-nav-content"> class="time-box"-->
-      <p-card header="Time Elapsed">
-        <p-divider/>
-        <div>
-          {{ currentTimer }}
-        </div>
-      </p-card>
-      <div class="nav-buttons">
-        <p-button label="Start" icon="pi pi-forward" iconPos="top" (onClick)="openLoginDialog()"/>
-        <app-login-page [visible]="openLogin"></app-login-page>
-        <!--<p-button label="Search" icon="pi pi-search" iconPos="top"/>-->
+      <div class="time-box">
+        <app-timer [eventStart]="trimerEvent"></app-timer>
       </div>
-      <!--<i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>-->
-      <!--</div>-->
+      <div class="nav-buttons">
+        <p-button *ngIf="!suiteConn" label="Connect to test suite" (onClick)="openLoginDialog(true)" />
+        <app-login-page [visible]="openLogin" (loginSuccess)="logingResponse($event)" (loginFailed)="openLoginDialog($event)"></app-login-page>
+        <p-button *ngIf="suiteConn" [disabled]=testStarted [loading]=isLoading label="Start" icon="pi pi-forward"
+          iconPos="left" (onClick)="startEvent()" />
+        <p-button *ngIf="suiteConn" [disabled]="!suiteConn || !testStarted" [loading]="isLoading" label="Stop"
+          icon="pi pi-stop" iconPos="left" (onClick)="stopEvent()" styleClass="p-button-danger" />
+      </div>
     </div>
   </div>
 </div>
-
-<!--
-<header class="header">
-  <img src="assets/logo/Title-removebg.png" alt="EFCBert Logo" class="logo">
-  <app-server-status [connStatus]="connStatus"></app-server-status>
-</header>-->
