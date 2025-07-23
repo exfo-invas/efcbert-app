@@ -29,7 +29,7 @@ export class ApiService {
 
   public getIPs() {
     const url = this.baseUrl + '/' + this.telnetContext + '/ip';
-    console.log(url);
+    console.log("ApiService: API call to request IPLIST to URL:-",url);
     return this.http.get(url, {responseType: 'json'});
   }
 

@@ -11,6 +11,7 @@ import { NgIf } from "@angular/common";
 import { Message } from "primeng/message";
 import { InputGroup } from "primeng/inputgroup";
 import { Select } from "primeng/select";
+import {IpService} from "../../service/ip.service";
 
 @Component({
   selector: 'app-login-page',
@@ -40,7 +41,7 @@ export class LoginPageComponent implements OnInit {
   selectedIp: string;
   ipLists: string[] = [];
 
-  constructor(private apiService: ApiService, private connectionService: ConnectionService) {
+  constructor(private apiService: ApiService, private connectionService: ConnectionService, private ipService: IpService) {
   }
 
   ngOnInit() {
@@ -48,14 +49,16 @@ export class LoginPageComponent implements OnInit {
   }
 
   getIpList(){
-    const ipv6List = sessionStorage.getItem('ipv6') ? JSON.parse(sessionStorage.getItem('ipv6')) : [];
-    const ipv4 = sessionStorage.getItem('ipv4');
+    this.ipService.getIPs();
+    const ipv4 = this.ipService.getIPv4();
+    const ipv6List = this.ipService.getIPv6();
     if (ipv4) {
       this.ipLists = [ipv4];
     }
     if (ipv6List && ipv6List.length > 0) {
       this.ipLists = this.ipLists.concat(ipv6List);
     }
+    console.log("LoginPage: IP Values recevied from IPService ")
   }
 
   getConnection() {

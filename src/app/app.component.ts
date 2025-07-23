@@ -4,6 +4,8 @@ import { ApiService } from './service/api.service';
 import { ConnectionService } from './service/connection.service';
 import { Router } from '@angular/router';
 import { LoggingService } from './logging/logging.service';
+import {IpService} from "./service/ip.service";
+import {EventStatusService} from "./service/eventStatus.service";
 
 @Component({
   selector: 'app-root',
@@ -42,8 +44,7 @@ export class AppComponent implements OnInit {
   ipv4: string;
   ipv6: string[];
 
-  constructor(private apiService: ApiService, private connectionService: ConnectionService, private router: Router, private loggingService: LoggingService) {
-    this.getIPs();
+  constructor(private apiService: ApiService, private connectionService: ConnectionService, private router: Router, private loggingService: LoggingService, private ipService: IpService, private eventStatusService: EventStatusService) {
   }
 
   ngOnInit() {
@@ -57,27 +58,8 @@ export class AppComponent implements OnInit {
 
   openLoginDialog(dialog: boolean) {
     this.openLogin = dialog;
-  }
-
-  getIPs() {
-    this.apiService.getIPs().subscribe({
-      next: (data: any) => {
-        console.log('Fetched IPs:', data);
-        // Assuming you want to store ipv4 and ipv6 in component properties
-        // Add these properties to your class if not already present:
-        // ipv4: string;
-        // ipv6: string[];
-        this.ipv4 = data.ipv4;
-        this.ipv6 = data.ipv6;
-        sessionStorage.setItem('ipv4', this.ipv4);
-        sessionStorage.setItem('ipv6', JSON.stringify(this.ipv6));
-      },
-      error: (error) => {
-        console.error('Error fetching IPs:', error);
-        this.ifError = true;
-        this.errorMessage = 'Failed to load IP addresses. Please try again later.';
-      }
-    });
+    this.ipService.getIPs();
+    console.log("AppComponent: Initial API request to get IP List");
   }
 
   logingResponse(event: { ip: string, port: string }) {
@@ -92,16 +74,16 @@ export class AppComponent implements OnInit {
   startEvent() {
     this.isLoading = true; // Set loading state to true when starting the event
     this.apiService.eventHandler(true).subscribe({
-      next: (data: any) => {
+      next: (data: string) => {
         console.log('Event started successfully:', data);
         // You can add additional logic here if needed after starting the event
-        if (data === 'Connection established') {
-          sessionStorage.setItem('eventStarted', 'true'); // Store event started status
+        if (data === 'true') {
+          this.eventStatusService.setEventStatus(true)
           this.loggingService.addLog('Test Event started successfully');
           this.connStatus = true; // Update connection status to true
           this.suiteConn = true; // Enable the button after starting the event
           this.testStarted = true; // Set testStarted to true after starting the event
-          this.isLoading = false; // Set loading state to false after the event is started
+          this.isLoading = false; // Set the loading state to false after the event is started
           this.router.navigate(['/event']); // Navigate to the event page
           this.trimerEvent = true; // Set the timer event flag to true
         }
@@ -120,7 +102,7 @@ export class AppComponent implements OnInit {
     this.apiService.eventHandler(false).subscribe({
       next: (data: any) => {
         console.log('Event stopped successfully:', data);
-        sessionStorage.removeItem('eventStarted'); // Remove event started status
+        this.eventStatusService.setEventStatus(false);
         this.testStarted = false; // Reset testStarted to false after stopping the event
         this.trimerEvent = false; // Reset the timer event flag to false
         this.loggingService.addLog('Test Event stopped successfully');
