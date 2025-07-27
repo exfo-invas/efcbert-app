@@ -7,14 +7,14 @@
           <td class="initial-tr">
           </td>
         </tr>
-        <tr class="initial-tr" *ngFor="let col of physicalColumns">
-          <td>{{ col.header }}</td>
+        <tr class="initial-tr" *ngFor="let phyCol of physicalColumns">
+          <td>{{ phyCol.header }}</td>
           <td>:</td>
           <td *ngIf="isNew">
             <p-skeleton width="5rem" styleClass="mb-2" />
           </td>
-          <td *ngIf="!isNew">
-            {{ physicalColumns[col.field] }}
+          <td *ngIf="!isNew" style="width: 5rem" pStyleClass="mb-2">
+            {{ physicalColumns[phyCol.field] }}
           </td>
         </tr>
       </table>
@@ -23,13 +23,15 @@
   <div class="cards-p">
     <p-card header="PORT B1 (WWN)">
       <table>
-        <tr class="initial-tr" *ngFor="let col of wwnColumns">
-          <td>{{ col.header }}</td>
+        <tr class="initial-tr" *ngFor="let wwnCol of wwnColumns">
+          <td>{{ wwnCol.header }}</td>
           <td>:</td>
           <td *ngIf="isNew">
             <p-skeleton width="5rem" styleClass="mb-2" />
           </td>
-          <td *ngIf="isNew">{{ wwnData[col.field] }}</td>
+          <td *ngIf="isNew"  style="width: 5rem" pStyleClass="mb-2">
+            {{ wwnData[wwnCol.field] }}
+          </td>
         </tr>
       </table>
     </p-card>
@@ -51,7 +53,7 @@
           <td *ngIf="isNew">
             <p-skeleton width="5rem" styleClass="mb-2" />
           </td>
-          <td *ngIf="!isNew">{{ pspLink }}</td>
+          <td *ngIf="!isNew"  style="width: 5rem" pStyleClass="mb-2">{{ pspLink }}</td>
       </table>
     </p-card>
   </div>

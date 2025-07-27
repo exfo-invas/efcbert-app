@@ -1,6 +1,39 @@
 import {Component, OnInit} from '@angular/core';
-import { ApiService } from '../service/api.service';
-import { LoggingService } from '../logging/logging.service';
+import {ApiService} from '../service/api.service';
+import {LoggingService} from '../logging/logging.service';
+import {ConnectionService} from "../service/connection.service";
+
+
+interface PyhsicalStatus {
+  laserStatus: string;
+  fcRate: string;
+  sfpPort: string;
+  txPower: string;
+  rxPower: string;
+}
+
+interface ToolStatus {
+  coupled: string;
+  txPattern: string;
+  rxPattern: string;
+  fcFrameSize: string;
+  trafficShaping: string;
+}
+
+interface PortStatus {
+  flowControl: string;
+  bufferCredit: string;
+  loging: string;
+}
+
+interface FullStatusData {
+  physicalStatus: PyhsicalStatus;
+  portStatus: PortStatus;
+  toolStatus: ToolStatus;
+  pspLinkStatus?: string;
+}
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +41,7 @@ import { LoggingService } from '../logging/logging.service';
   styleUrls: ['./dashboard.component.scss'],
   standalone: false,
 })
+
 export class DashboardComponent implements OnInit {
   isNew: boolean = true;
   command: string;
@@ -15,13 +49,13 @@ export class DashboardComponent implements OnInit {
   pspLink: string = "";
 
   physicalColumns = [
-    { field: 'fcRate', header: 'FC Rate' },
-    { field: 'sfpPort', header: 'SFP & Port' },
-    { field: 'txPower', header: 'TX Power' },
-    { field: 'rxPower', header: 'RX Power' }
+    {field: 'fcRate', header: 'FC Rate'},
+    {field: 'sfpPort', header: 'SFP & Port'},
+    {field: 'txPower', header: 'TX Power'},
+    {field: 'rxPower', header: 'RX Power'}
   ];
 
-  physicalData = {
+  physicalData : PyhsicalStatus = {
     laserStatus: '',
     fcRate: '',
     sfpPort: '',
@@ -30,26 +64,26 @@ export class DashboardComponent implements OnInit {
   };
 
   wwnColumns = [
-    { field: 'flowControl', header: 'Buffer Flow Control' },
-    { field: 'bufferCredit', header: 'Available BB Credit' },
-    { field: 'loging', header: 'logging' }
+    {field: 'flowControl', header: 'Buffer Flow Control'},
+    {field: 'bufferCredit', header: 'Available BB Credit'},
+    {field: 'loging', header: 'logging'}
   ];
 
-  wwnData = {
+  wwnData: PortStatus = {
     flowControl: '',
     bufferCredit: '',
     loging: ''
   };
 
   deviceConfigColumns = [
-    { field: 'coupled', header: 'Coupled' },
-    { field: 'txPattern', header: 'TX Pattern' },
-    { field: 'rxPattern', header: 'RX Pattern' },
-    { field: 'fcFrameSize', header: 'FC Frame Size' },
-    { field: 'trafficShaping', header: 'Traffic Shaping' }
+    {field: 'coupled', header: 'Coupled'},
+    {field: 'txPattern', header: 'TX Pattern'},
+    {field: 'rxPattern', header: 'RX Pattern'},
+    {field: 'fcFrameSize', header: 'FC Frame Size'},
+    {field: 'trafficShaping', header: 'Traffic Shaping'}
   ];
 
-  deviceConfigData = {
+  deviceConfigData: ToolStatus = {
     coupled: '',
     txPattern: '',
     rxPattern: '',
@@ -57,25 +91,34 @@ export class DashboardComponent implements OnInit {
     trafficShaping: ''
   };
 
-  constructor(private apiService: ApiService, private loggingService: LoggingService) {
-    this.getFullStatusData();
+  constructor(private apiService: ApiService, private loggingService: LoggingService, private connectionService: ConnectionService) {
+
   }
 
   ngOnInit() {
+    if (this.connectionService.getStatus())
+      console.log('Dashboard: Connection is established');
     this.getFullStatusData();
   }
 
+
+  // this.getFullStatusData();
+  // console.log('ngOnInit: ',this.physicalData)
+
   getFullStatusData() {
-    this.apiService.getStatus().subscribe((data: any) => {
-      if (data) {
+    this.apiService.getStatus().subscribe((data: FullStatusData) => {
+      console.log('Full status data:', data);
+      console.log('pspLink: ', data.pspLinkStatus);
+      if (data.pspLinkStatus === 'Connection is not established' || data.pspLinkStatus === 'Undefined') {
+        this.isNew = true;
+      } else {
         this.isNew = false;
+        console.log('fullStatusData :',data.physicalStatus);
         this.physicalData = data.physicalStatus;
         this.wwnData = data.portStatus;
         this.deviceConfigData = data.toolStatus;
         this.pspLink = data.pspLinkStatus || '';
         this.loggingService.addLog('Full status data fetched successfully');
-      } else {
-        this.isNew = true;
       }
     }, error => {
       console.error('Error fetching full status data:', error);

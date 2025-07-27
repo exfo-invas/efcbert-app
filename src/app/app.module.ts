@@ -32,6 +32,7 @@ import {Ripple} from "primeng/ripple";
 import {Skeleton} from "primeng/skeleton";
 import { TimerComponent } from "./shared/timer/timer.component";
 import {TabPanel, TabView} from "primeng/tabview";
+import {StyleClass} from "primeng/styleclass";
 
 @NgModule({
   declarations: [
@@ -40,34 +41,35 @@ import {TabPanel, TabView} from "primeng/tabview";
     EventComponent
   ],
   bootstrap: [AppComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    InputText,
-    Card,
-    TableModule,
-    Button,
-    Message,
-    Panel,
-    Tooltip,
-    Toast,
-    ConfirmPopup,
-    NgOptimizedImage,
-    LoginPageComponent,
-    ServerStatusComponent,
-    Rating,
-    Tag,
-    Divider,
-    Menu,
-    MegaMenu,
-    Ripple,
-    Skeleton,
-    TimerComponent,
-    TabView,
-    TabPanel
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        InputText,
+        Card,
+        TableModule,
+        Button,
+        Message,
+        Panel,
+        Tooltip,
+        Toast,
+        ConfirmPopup,
+        NgOptimizedImage,
+        LoginPageComponent,
+        ServerStatusComponent,
+        Rating,
+        Tag,
+        Divider,
+        Menu,
+        MegaMenu,
+        Ripple,
+        Skeleton,
+        TimerComponent,
+        TabView,
+        TabPanel,
+        StyleClass
+    ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),

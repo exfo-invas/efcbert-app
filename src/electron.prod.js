@@ -7,7 +7,7 @@ let win;
 
 const createWindow = () => {
   win = new BrowserWindow({
-    width: 1000, height: 800, icon: path.join(__dirname, "favicon.ico"), webPreferences: {
+    width: 1200, height: 800, icon: path.join(__dirname, "favicon.ico"), webPreferences: {
       nodeIntegration: true, // turn it on to use node features
     },
   });

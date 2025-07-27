@@ -23,9 +23,14 @@ export class EventStatusService {
   getEventDetails(): void {
     this.apiService.getEventDetails().subscribe({
       next: (response: EventDisruptions) => {
-        console.log(`Event disruptions data for :`, response);
-        this.getEventDisruptions(response);
-        this.loggingService.addLog(`Event disruptions data fetched successfully`);
+        if (response === null || response === undefined) {
+          console.log("eventService.ts: No event details found.");
+          return;
+        } else {
+          console.log(`Event disruptions data for :`, response);
+          this.getEventDisruptions(response);
+          this.loggingService.addLog(`Event disruptions data fetched successfully`);
+        }
       },
       error: (error) => {
         console.error(`Error fetching event disruptions data for:`, error);
