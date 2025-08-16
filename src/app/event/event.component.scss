@@ -6,6 +6,13 @@
   padding: 1%;
 }
 
+.small-table {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
 .base-form-content {
   display: flex;
   flex-direction: column;
@@ -14,11 +21,11 @@
   align-items: baseline;
 }
 
-.form-input-fields{
+.form-input-fields {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  gap : 1em;
+  gap: 1em;
 }
 
 .text-center {

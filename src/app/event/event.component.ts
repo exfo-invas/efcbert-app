@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FrameLossResponse, TrafficResponse } from './event.component.model';
+import {EventDisruptions, FrameLossResponse, standardTestResponse, TrafficResponse} from './event.component.model';
 import {EventStatusService} from "../service/eventStatus.service";
 
 @Component({
@@ -13,10 +13,6 @@ export class EventComponent implements OnInit {
   trafficDisruptions: TrafficResponse[] = [
     {
       type: 'Tx',
-      fcRate: '-',
-      actualThroughput: 0,
-      actualTransferSpeed: 0,
-      lineSpeed: 0,
       currentUtilization: 0,
       measuredThroughput: 0,
       transferSpeed: 0,
@@ -24,10 +20,6 @@ export class EventComponent implements OnInit {
     },
     {
       type: 'Rx',
-      fcRate: '-',
-      actualThroughput: 0,
-      actualTransferSpeed: 0,
-      lineSpeed: 0,
       currentUtilization: 0,
       measuredThroughput: 0,
       transferSpeed: 0,
@@ -37,128 +29,75 @@ export class EventComponent implements OnInit {
 
   frameLosses: FrameLossResponse[] = [
     {
-      fcRate: '1x',
-      txCount: 0,
-      rxCount: 0,
-      lostFrames: 0,
+      type: 'Tx',
+      byteCount: 0,
+      measuredRate: 0,
+      frameRate: 0,
+      frameCount: 0,
+      frameLossRate: 0
+    },
+    {
+      type: 'Rx',
+      byteCount: 0,
+      measuredRate: 0,
+      frameRate: 0,
+      frameCount: 0,
       frameLossRate: 0
     }
   ]
+
+  standardResponse: standardTestResponse = {
+    fcRate: 0,
+    frameSize: 0
+  }
 
   constructor(private eventStatus: EventStatusService) {
   }
 
   //Every Second, fetch the latest data for throughput, frame loss, service disruption, and traffic disruption
   ngOnInit(): void {
-    this.eventStatus.getEventDetails();
-
     if (this.eventStatus.getEventStatus()) {
       setInterval(() => {
         console.log('Fetching event details...');
-        this.eventStatus.getEventDetails();
-        console.log('Event details skipped as event is not started.');
+        this.eventStatus.getEventDetails().then((response) => {
+          console.log('EventComponent: Event details:', response);
+          if (response !== null && response !== undefined) {
+            console.log('Event Component: Event details fetched successfully:', response);
+            this.getEventDisruptions(response);
+          } else {
+            console.log('No event details found.');
+            console.log('Event details skipped as event is not started.');
+          }
+        }).catch((error) => {
+          console.error('Error fetching event details:', error);
+        });
       }, 10000); // 10000 ms = 10 seconds
     }
   }
 
-  // getEventDetails(): void {
-  //   this.apiService.getEventDetails().subscribe({
-  //     next: (response: EventDisruptions) => {
-  //       console.log(`Event disruptions data for :`, response);
-  //       this.getEventDisruptions(response);
-  //       this.loggingService.addLog(`Event disruptions data fetched successfully`);
-  //     },
-  //     error: (error) => {
-  //       console.error(`Error fetching event disruptions data for:`, error);
-  //     }
-  //   });
-  // }
-  //
-  // private getEventDisruptions(disruption: EventDisruptions): void {
-  //   this.getFrameLoss(disruption.frameLoss);
-  //   this.getTrafficDisruption(disruption.traffic);
-  // }
-  //
-  // private getTrafficDisruption(response: TrafficResponse[]): void {
-  //   if (response && response.length > 0) {
-  //     response.forEach((disruption) => {
-  //       const index = disruption.type.toLowerCase() === 'tx' ? 0 : 1;
-  //       if (this.trafficDisruptions[index]) {
-  //         Object.assign(this.trafficDisruptions[index], disruption);
-  //       }
-  //     });
-  //   }
-  // }
-  //
-  // private getFrameLoss(response: FrameLossResponse[]): void {
-  //   Object.assign(this.frameLosses[0], response);
-  // }
+
+  private getEventDisruptions(disruption: EventDisruptions): void {
+    this.getFrameLoss(disruption.frameLoss);
+    this.getTrafficDisruption(disruption.traffic);
+  }
+
+  private getTrafficDisruption(response: TrafficResponse[]): void {
+    if (response && response.length > 0) {
+      response.forEach((disruption) => {
+        console.log("eventService.ts: Updating traffic disruption data", disruption);
+        const index = disruption.type.toLowerCase() === 'tx' ? 0 : 1;
+        console.log("eventService.ts: Traffic disruption index", index, "for type", disruption.type);
+        if (this.trafficDisruptions[index]) {
+          console.log("eventService.ts: Found existing traffic disruption at index", index);
+          this.trafficDisruptions[index] = {...disruption};
+          //Object.assign(this.trafficDisruptions[index], disruption);
+        }
+      });
+    }
+  }
+
+  private getFrameLoss(response: FrameLossResponse): void {
+    console.log("eventService.ts: Updating frame loss data", response);
+    this.frameLosses[0] = {...response};
+  }
 }
-
-
-
-//Backup of additional tables
-// throughPuts: ThroughputResponse[] = [
-//   {
-//     type: 'Tx',
-//     fcRate: '-',
-//     frameSize: '-',
-//     fullLineRate: '-',
-//     measureRate: '-',
-//     framesLossRate: '-'
-//   },
-//   {
-//     type: 'Rx',
-//     fcRate: '-',
-//     frameSize: '-',
-//     fullLineRate: '-',
-//     measureRate: '-',
-//     framesLossRate: '-'
-//   }];
-
-// serviceDisruptions: ServiceDisruptions[] = [
-//   {
-//     type: 'Tx',
-//     speed: '-',
-//     frameSize: '-',
-//     lineDataRate: '-',
-//     txUtilization: '-',
-//     throughput: '-'
-//   },
-//   {
-//     type: 'Rx',
-//     speed: '-',
-//     frameSize: '-',
-//     lineDataRate: '-',
-//     txUtilization: '-',
-//     throughput: '-',
-//   },
-// ];
-
-
-// EventThroughput(eventThroughput: EventThroughput): void {
-//   this.getThroughput(eventThroughput.throughput);
-//   this.getServiceDisruptionCommand(eventThroughput.service);
-// }
-
-// getServiceDisruptionCommand(response: ServiceDisruptions[]): void {
-//   if (response && response.length > 0) {
-//     response.forEach((disruption) => {
-//       const index = disruption.type === 'Tx' ? 0 : 1;
-//       if (this.serviceDisruptions[index]) {
-//         Object.assign(this.serviceDisruptions[index], disruption);
-//       }
-//     });
-//   }
-// }
-
-// getThroughput(response: ThroughputResponse[]): void {
-//   if (response && response.length > 0) {
-//     response.forEach((throughput) => {
-//       const index = throughput.type === 'Tx' ? 0 : 1;
-//       if (this.throughPuts[index]) {
-//         Object.assign(this.throughPuts[index], throughput);
-//       }
-//     });
-//   }
-// }

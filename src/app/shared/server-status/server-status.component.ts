@@ -3,6 +3,7 @@ import {Button} from "primeng/button";
 import {NgIf} from "@angular/common";
 import {Tooltip} from "primeng/tooltip";
 import {Dialog} from "primeng/dialog";
+import {ElectronService} from "../../service/electron.service";
 
 @Component({
   selector: 'app-server-status',
@@ -17,7 +18,7 @@ import {Dialog} from "primeng/dialog";
 })
 export class ServerStatusComponent implements OnInit {
 
-  constructor() {
+  constructor( private electronService: ElectronService) {
   }
 
   ngOnInit() {
@@ -30,6 +31,7 @@ export class ServerStatusComponent implements OnInit {
   port: string;
 
   showDialog() {
+    this.electronService.callElectronMethod({ action: 'reconnect' });
     this.visible = true;
   }
 }

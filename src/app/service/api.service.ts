@@ -26,6 +26,13 @@ export class ApiService {
     return this.http.get(url, {responseType: 'json'});
   }
 
+  public gethealthy() {
+    const path = '/telnet/ishealthy';
+    const url = this.baseUrl + path;
+    console.log(url);
+    return this.http.get(url, {responseType: 'json'});
+  }
+
 
   public getIPs() {
     const url = this.baseUrl + '/' + this.telnetContext + '/ip';
@@ -63,7 +70,6 @@ export class ApiService {
     console.log(url);
     return this.http.get(url, {responseType: 'json'});
   }
-
 
   eventHandler(toggle:boolean) {
     const path = '/config/test/{toggle}';

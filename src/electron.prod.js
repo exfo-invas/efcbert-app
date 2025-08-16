@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require("electron");
+const {app, BrowserWindow, ipcMain} = require("electron");
 const path = require("path");
 const {exec} = require("child_process");
 const http = require('http');
@@ -89,5 +89,12 @@ const stopServer = () => {
     console.error(`Error sending shutdown request: ${error.message}`);
   }
 
+  ipcMain.on('call-method', (event, data) => {
+    if (data.action === 'reconnect') {
+      // Execute your method here
+      console.log('Reconnect method called from Angular');
+      startServer();
+    }
+  });
 
 }

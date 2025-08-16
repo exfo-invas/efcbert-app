@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
   isLoading: boolean = false; // Loading state for the button
   testStarted: boolean = false; // Flag to indicate if the test has started
   trimerEvent: boolean = false; // Flag to indicate if the timer event is active
+  isHealthy: boolean = false;
+  private healthCheckInterval: any;
 
   items: MegaMenuItem[] = [
     {
@@ -48,6 +50,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkBackendHealthUntilHealthy();
     // Execute on load
     this.connStatus = this.connectionService.getStatus();
     // Repeat every 5 minutes
@@ -56,9 +59,27 @@ export class AppComponent implements OnInit {
     }, 300000); // 300000 ms = 5 minutes
   }
 
+  checkBackendHealthUntilHealthy() {
+    this.healthCheckInterval = setInterval(() => {
+      this.apiService.gethealthy().subscribe({
+        next: (data: any) => {
+          console.log('Health check response:', data);
+          if (data.status === "UP") { // Adjust condition as needed
+            this.isHealthy = true;
+            clearInterval(this.healthCheckInterval);
+            console.log('Backend is healthy, stopping health checks.');
+          }
+        },
+        error: () => {
+          this.isHealthy = false;
+        }
+      });
+    }, 5000); // Check every 5 seconds
+  }
+
   openLoginDialog(dialog: boolean) {
-    this.openLogin = dialog;
     this.ipService.getIPs();
+    this.openLogin = dialog;
     console.log("AppComponent: Initial API request to get IP List");
   }
 
