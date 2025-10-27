@@ -29,12 +29,12 @@ export class AppComponent implements OnInit {
 
     },
     {
-      label: 'Execution',
+      label: 'Results',
       root: true,
       routerLink: '/event',
     },
     {
-      label: 'Logging',
+      label: 'Logger',
       root: true,
       routerLink: '/logging',
     }

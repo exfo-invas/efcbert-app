@@ -88,4 +88,11 @@ export class ApiService {
     return this.http.get(url, {responseType: 'json'});
   }
 
+  getHourlyEventDetails() {
+    const path = '/details/hourly';
+    const url = this.baseUrl + path;
+    console.log(url);
+    return this.http.get(url, {responseType: 'json'});
+  }
+
 }

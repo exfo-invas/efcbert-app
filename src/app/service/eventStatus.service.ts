@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
-import {EventDisruptions, FrameLossResponse, TrafficResponse} from "../event/event.component.model";
+import {EventDisruptions, FrameLossResponse, HourlyEvent, StandardEvent, TrafficResponse} from "../event/event.component.model";
 import {LoggingService} from "../logging/logging.service";
 import {ApiService} from "./api.service";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class EventStatusService {
   private eventStatus: boolean = false;
   private trafficDisruptions: TrafficResponse[];
   private frameLosses: FrameLossResponse[];
+  private standardEvent: StandardEvent;
 
   constructor(private apiService: ApiService, private loggingService: LoggingService) {
   }
@@ -20,36 +22,30 @@ export class EventStatusService {
     return this.eventStatus;
   }
 
-  getEventDetails(): void {
-    this.apiService.getEventDetails().subscribe({
-      next: (response: EventDisruptions) => {
-        console.log(`Event disruptions data for :`, response);
-        this.getEventDisruptions(response);
-        this.loggingService.addLog(`Event disruptions data fetched successfully`);
-      },
-      error: (error) => {
-        console.error(`Error fetching event disruptions data for:`, error);
-      }
-    });
-  }
-
-  private getEventDisruptions(disruption: EventDisruptions): void {
-    this.getFrameLoss(disruption.frameLoss);
-    this.getTrafficDisruption(disruption.traffic);
-  }
-
-  private getTrafficDisruption(response: TrafficResponse[]): void {
-    if (response && response.length > 0) {
-      response.forEach((disruption) => {
-        const index = disruption.type.toLowerCase() === 'tx' ? 0 : 1;
-        if (this.trafficDisruptions[index]) {
-          Object.assign(this.trafficDisruptions[index], disruption);
-        }
-      });
+  async getEventDetails(): Promise<EventDisruptions> {
+    try {
+  const response = await firstValueFrom(this.apiService.getEventDetails()) as EventDisruptions;
+      console.log(`Event disruptions data for :`, response);
+      this.loggingService.addLog(`Event disruptions data fetched successfully`);
+      return response;
+    } catch (error) {
+      console.error(`Error fetching event disruptions data for:`, error);
+      // rethrow so callers can handle the rejection
+      throw error;
     }
   }
 
-  private getFrameLoss(response: FrameLossResponse[]): void {
-    Object.assign(this.frameLosses[0], response);
+  // hourly event data fetch can be added here in future
+  async getHourlyEventDetails(): Promise<HourlyEvent[]> {
+    try {
+      const response = await firstValueFrom(this.apiService.getHourlyEventDetails()) as HourlyEvent[];
+      console.log(`Hourly event data for :`, response);
+      this.loggingService.addLog(`Hourly event data fetched successfully`);
+      return response;
+    } catch (error) {
+      console.error(`Error fetching hourly event data for:`, error);
+      // rethrow so callers can handle the rejection
+      throw error;
+    }
   }
 }

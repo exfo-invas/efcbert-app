@@ -1,184 +1,116 @@
 <div class="main-content">
-  <p-table [value]="trafficDisruptions" responsiveLayout="scroll">
-    <ng-template #caption>
-      <div class="flex items-center justify-between padding-0">
-        <strong>Traffic</strong>
-      </div>
-    </ng-template>
+  <p-table [value]="[standardEvent]" responsiveLayout="scroll" class="stndEvntTable" [size]="'small'">
     <ng-template pTemplate="header">
       <tr>
-        <th>Type</th>
-        <th>FC Rate</th>
-        <th>Actual Throughput (Mbps)</th>
-        <th>Actual Transfer Speed (MB/s)</th>
-        <th>Lines Speed (Gbps)</th>
-        <th>Current Utilization (%)</th>
-        <th>Measured Throughput (Mbps)</th>
-        <th>Transfer Speed (MB/s)</th>
-        <th>Measured Line Speed (Gbps)</th>
+        <th style="text-align: center;">FC Rate</th>
+        <th style="text-align: center;">Frame Size</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>{{ row.type }}</td>
-        <td>{{ row.fcRate }}</td>
-        <td>{{ row.actualThroughput }}</td>
-        <td>{{ row.actualTransferSpeed }}</td>
-        <td>{{ row.lineSpeed }}</td>
-        <td>{{ row.currentUtilization }}</td>
-        <td>{{ row.measuredThroughput }}</td>
-        <td>{{ row.transferSpeed }}</td>
-        <td>{{ row.measuredLineSpeed }}</td>
+        <td style="text-align: center;">{{ row.fcRate }}</td>
+        <td style="text-align: center;">{{ row.frameSize }}</td>
       </tr>
     </ng-template>
   </p-table>
-
-  <p-table [value]="frameLosses">
-    <ng-template #caption>
-      <div class="flex items-center justify-between">
-        <Strong>Frame Loss</Strong>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th>FC Rate</th>
-        <th>Tx Frame Count</th>
-        <th>Rx Frame Count</th>
-        <th>Number Lost Frames</th>
-        <th>Frame Loss Rate (%)</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-frameLoss>
-      <tr>
-        <td>{{ frameLoss.fcRate }}</td>
-        <td>{{ frameLoss.txCount }}</td>
-        <td>{{ frameLoss.rxCount }}</td>
-        <td>{{ frameLoss.lostFrames }}</td>
-        <td>{{ frameLoss.frameLossRate }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-  <!-- <p-tabView>
-    <p-tabPanel header="Calculation Set 1">
-      <p-table [value]="serviceDisruptions" responsiveLayout="scroll">
+  <p-tabView>
+    <p-tabPanel header="Active Event">
+      <p-table [value]="trafficDisruptions" responsiveLayout="scroll" [size]="'small'">
         <ng-template #caption>
           <div class="flex items-center justify-between padding-0">
-            <strong>Service Disruption</strong>
+            <strong>Traffic Analysis</strong>
           </div>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th rowspan="2"></th>
-            <th>Speed</th>
-            <th>Frame size (Frame Length - bytes)</th>
-            <th>Line Data rate</th>
-            <th>Current Tx Utilization %</th>
+            <th style="text-align: center;">Type</th>
+            <th style="text-align: center;">Current Utilization (%)</th>
+            <th style="text-align: center;">Measured Throughput (Mbps)</th>
+            <th style="text-align: center;">Transfer Speed (MB/s)</th>
+            <th style="text-align: center;">Measured Line Speed (Gbps)</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td style="text-align: center;">{{ row.type }}</td>
+            <td style="text-align: center;">{{ row.currentUtilization }}</td>
+            <td style="text-align: center;">{{ row.measuredThroughput }}</td>
+            <td style="text-align: center;">{{ row.transferSpeed }}</td>
+            <td style="text-align: center;">{{ row.measuredLineSpeed }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-table [value]="frameLosses" responsiveLayout="scroll" [size]="'small'">
+        <ng-template #caption>
+          <div class="flex items-center justify-between padding-0">
+            <strong>Frame loss</strong>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="text-align: center;">Type</th>
+            <th style="text-align: center;">Byte Count</th>
+            <th style="text-align: center;">Frame Rate</th>
+            <th style="text-align: center;">Frame Count</th>
+            <th style="text-align: center;">Frame Loss Rate</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td style="text-align: center;">{{ row.type }}</td>
+            <td style="text-align: center;">{{ row.byteCount }}</td>
+            <td style="text-align: center;">{{ row.frameRate }}</td>
+            <td style="text-align: center;">{{ row.frameCount }}</td>
+            <td rowspan="2" *ngIf="row.type !== 'Rx'" class="frmlsRtCol">{{ row.frameLossRate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-table [value]="[latencyEvent]" responsiveLayout="scroll" [size]="'small'">
+        <ng-template #caption>
+          <div class="flex items-center justify-between padding-0">
+            <strong>Latency</strong>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="text-align: center;">Last</th>
+            <th style="text-align: center;">Min</th>
+            <th style="text-align: center;">Max</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td style="text-align: center;">{{ row.last }}</td>
+            <td style="text-align: center;">{{ row.min }}</td>
+            <td style="text-align: center;">{{ row.max }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+    <p-tabPanel header="Hourly Event">
+      <p-table [value]="hourlyEvents" [scrollable]="true" scrollHeight="300px" [size]="'small'">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Hour No.</th>
+            <th>Utilization</th>
             <th>Throughput</th>
+            <th>Latency</th>
+            <th>Frames loss rate(%)</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-row>
+        <ng-template pTemplate="body" let-hourlyEvent>
           <tr>
-            <td>{{ row.type }}</td>
-            <td>{{ row.speed }}</td>
-            <td>{{ row.frameSize }}</td>
-            <td>{{ row.lineDataRate }}</td>
-            <td>{{ row.txUtilization }}</td>
-            <td>{{ row.throughput }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-
-      <p-table [value]="trafficDisruptions" responsiveLayout="scroll">
-        <ng-template #caption>
-          <div class="flex items-center justify-between padding-0">
-            <strong>Traffic</strong>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Type</th>
-            <th>FC Rate</th>
-            <th>Protocol</th>
-            <th>Encoding</th>
-            <th>Actual Throughput (Mbps)</th>
-            <th>Actual Transfer Speed (MB/s)</th>
-            <th>Lines Speed (Gbps)</th>
-            <th>Current Utilization (%)</th>
-            <th>Measured Throughput (Mbps)</th>
-            <th>Transfer Speed (MB/s)</th>
-            <th>Measured Line Speed (Gbps)</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-row>
-          <tr>
-            <td>{{ row.type }}</td>
-            <td>{{ row.fcRate }}</td>
-            <td>{{ row.protocol }}</td>
-            <td>{{ row.encoding }}</td>
-            <td>{{ row.actualThroughput }}</td>
-            <td>{{ row.actualTransferSpeed }}</td>
-            <td>{{ row.lineSpeed }}</td>
-            <td>{{ row.currentUtilization }}</td>
-            <td>{{ row.measuredThroughput }}</td>
-            <td>{{ row.transferSpeed }}</td>
-            <td>{{ row.measuredLineSpeed }}</td>
+            <td>{{ hourlyEvent.no }}</td>
+            <td>{{ hourlyEvent.utilization }}</td>
+            <td>{{ hourlyEvent.throughput }}</td>
+            <td>{{ hourlyEvent.latency }}</td>
+            <td>{{ hourlyEvent.framesLoss }}</td>
           </tr>
         </ng-template>
       </p-table>
     </p-tabPanel>
-
-    <p-tabPanel header="Calculation Set 2">
-      <p-table [value]="throughPuts">
-        <ng-template #caption>
-          <div class="flex items-center justify-between padding-0">
-            <strong>Throughput</strong>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Type</th>
-            <th>FC Rate</th>
-            <th>Frame size</th>
-            <th>Full line rate</th>
-            <th>Measure rate (Frames/sec)</th>
-            <th>Frames loss rate (%)</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-throughPut>
-          <tr>
-            <td>{{ throughPut.type }}</td>
-            <td>{{ throughPut.fcRate }}</td>
-            <td>{{ throughPut.frameSize }}</td>
-            <td>{{ throughPut.fullLineRate }}</td>
-            <td>{{ throughPut.measureRate }}</td>
-            <td>{{ throughPut.framesLossRate }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-
-      <p-table [value]="frameLosses">
-        <ng-template #caption>
-          <div class="flex items-center justify-between">
-            <Strong>Frame Loss</Strong>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Type</th>
-            <th>Frame Rate</th>
-            <th>Total no.of bytes transmitted</th>
-            <th>Frames Transmitted</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-frameLoss>
-          <tr>
-            <td>{{ frameLoss.type }}</td>
-            <td>{{ frameLoss.frameRate }}</td>
-            <td>{{ frameLoss.totalTransmittedBytes }}</td>
-            <td>{{ frameLoss.framesTransmitted }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-tabPanel>
-  </p-tabView> -->
+  </p-tabView>
 </div>

@@ -1,25 +1,6 @@
-<!--<div class="main-content">
-  <div class="base-form-content">
-    <p-card header="Connect to Testing Tools">
-      <table>
-        <tr>
-          <td><label for="ipaddress">IP Address: </label></td>
-          <td><input pInputText id="ipaddress" [(ngModel)]="ipaddress"/></td>
-        </tr>
-        <tr>
-          <td><label for="port">Port: </label></td>
-          <td><input pInputText id="port" [(ngModel)]="port"/></td>
-        </tr>
-      </table>
-      <div class="button-p-card">
-        <p-button (click)="getConnection()" label="Connect"/>
-      </div>
-    </p-card>
-  </div>
-</div>-->
 <div>
   <p-dialog header="Connect to FCBERT Test Engine" [modal]="true" [(visible)]="visible" [closable]="true" (onHide)="onDialogHide()"
-    [style]="{ width: '35rem', height: '25rem' }">
+    [style]="{ width: '35rem', height: '15rem' }">
     <div class="dialog-content">
       <div class="dialog-form-content">
         <table>
@@ -31,11 +12,11 @@
               </p-inputgroup>
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td><label for="port">Port: </label></td>
             <td><input pInputText id="port" [(ngModel)]="port" /></td>
             <p-button (click)="getIpList()" icon="pi pi-refresh" class="p-button-secondary" />
-          </tr>
+          </tr> -->
         </table>
         <div class="button-p-card">
           <p-button (click)="getConnection()" label="Connect" />

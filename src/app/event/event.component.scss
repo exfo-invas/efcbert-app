@@ -1,17 +1,26 @@
 .main-content {
-  height: 95%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 1%;
   padding: 1%;
 }
 
-.base-form-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  flex-wrap: wrap;
-  align-items: baseline;
+// .base-form-content {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1em;
+//   flex-wrap: wrap;
+//   align-items: baseline;
+// }
+
+.frmlsRtCol {
+  text-align: center;
+}
+
+.stndEvntTable {
+  width: 30%;
+  margin: 0 auto;
 }
 
 .form-input-fields{

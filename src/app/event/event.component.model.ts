@@ -1,52 +1,41 @@
 export class EventDisruptions {
   frameLoss: FrameLossResponse[];
   traffic: TrafficResponse[];
+  standardEvent: StandardEvent;
+  latencyEvent: LatencyEvent;
 }
 
 export class FrameLossResponse {
-  fcRate: string;
-  txCount: number;
-  rxCount: number;
-  lostFrames: number;
+  type: string;
+  byteCount: number;
+  frameRate: number;
+  frameCount: number;
   frameLossRate: number;
 }
 
 export class TrafficResponse {
   type: string;
-  fcRate: string;
-  actualThroughput: number;
-  actualTransferSpeed: number;
-  lineSpeed: number;
   currentUtilization: number;
   measuredThroughput: number;
   transferSpeed: number;
   measuredLineSpeed: number;
 }
 
-// export class EventThroughput {
-//   throughput: ThroughputResponse[];
-//   service: ServiceDisruptions[];
-// }
+export class StandardEvent {
+  fcRate: string;
+  frameSize: string;
+}
 
-// export class EventDetails {
-//   EventDisruptions: EventDisruptions;
-//   EventThroughput: EventThroughput;
-// }
+export class LatencyEvent {
+  last: string;
+  min: string;
+  max: string;
+}
 
-// export class ServiceDisruptions {
-//   type: string;
-//   speed: string;
-//   frameSize: string;
-//   lineDataRate: string;
-//   txUtilization: string;
-//   throughput: string;
-// }
-
-// export class ThroughputResponse {
-//   type: string;
-//   fcRate: string;
-//   frameSize: string;
-//   fullLineRate: string;
-//   measureRate: string;
-//   framesLossRate: string;
-// }
+export class HourlyEvent {
+  no: number;
+  utilization: string;
+  throughput: string;
+  latency: string;
+  framesLoss: string;
+}
