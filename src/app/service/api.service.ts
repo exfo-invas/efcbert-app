@@ -18,9 +18,9 @@ export class ApiService {
   telnetContext = 'telnet';
 
   //method to send http request to the server
-  public get(url: string, port: any) {
-    const path = '/telnet/connect/{ip}/{port}';
-    url = this.baseUrl + path.replace('{ip}', url).replace('{port}', port);
+  public get(url: string) {
+    const path = '/telnet/connect/{ip}';
+    url = this.baseUrl + path.replace('{ip}', url);
     console.log(url);
 
     return this.http.get(url, {responseType: 'json'});
@@ -89,7 +89,7 @@ export class ApiService {
   }
 
   getHourlyEventDetails() {
-    const path = '/details/hourly';
+    const path = '/event/details/hourly';
     const url = this.baseUrl + path;
     console.log(url);
     return this.http.get(url, {responseType: 'json'});
