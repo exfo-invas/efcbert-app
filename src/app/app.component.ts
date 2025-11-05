@@ -4,8 +4,8 @@ import { ApiService } from './service/api.service';
 import { ConnectionService } from './service/connection.service';
 import { Router } from '@angular/router';
 import { LoggingService } from './logging/logging.service';
-import {IpService} from "./service/ip.service";
-import {EventStatusService} from "./service/eventStatus.service";
+import { IpService } from "./service/ip.service";
+import { EventStatusService } from "./service/eventStatus.service";
 
 @Component({
   selector: 'app-root',
@@ -62,9 +62,9 @@ export class AppComponent implements OnInit {
     console.log("AppComponent: Initial API request to get IP List");
   }
 
-  logingResponse(event: { ip: string, port: string }) {
-    console.log('Login successful with IP:', event.ip, 'and Port:', event.port);
-    this.loggingService.addLog(`Login successful with IP: ${event.ip} and Port: ${event.port}`);
+  logingResponse(event: { ip: string }) {
+    console.log('Login successful with IP:', event.ip);
+    this.loggingService.addLog(`Login successful with IP: ${event.ip}`);
     this.connStatus = true; // Update connection status to true
     this.openLogin = false;
     this.suiteConn = true; // Enable the button after a successful login
@@ -73,6 +73,7 @@ export class AppComponent implements OnInit {
 
   startEvent() {
     this.isLoading = true; // Set loading state to true when starting the event
+
     this.apiService.eventHandler(true).subscribe({
       next: (data: string) => {
         console.log('Event started successfully:', data);
