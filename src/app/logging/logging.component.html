@@ -21,8 +21,7 @@
 
 <div class="flex items-center justify-between mb-4">
   <h5 class="m-0">Latency Test Results</h5>
-  <p-table [value]="paddedLogsData" [scrollable]="true" [scrollHeight]="'calc(95vh - 130px)'"
-    [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="paddedLogsData" [scrollable]="true" [scrollHeight]="'calc(95vh - 130px)'">
     <ng-template #header>
       <tr>
         <th style="width:10%">ID</th>
@@ -32,7 +31,7 @@
       </tr>
     </ng-template>
     <ng-template #body let-customer let-rowIndex="rowIndex">
-      <tr style="height: 46px;">
+      <tr style="height: 32px;">
         <td>{{ customer.id }}</td>
         <td>{{ customer.startTime }}</td>
         <td>{{ customer.event }}</td>

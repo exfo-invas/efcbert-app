@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Button } from "primeng/button";
 import { FormsModule } from "@angular/forms";
-import { InputText } from "primeng/inputtext";
 import { ConnectionTCP } from "../../service/api.service.model";
 import { ApiService } from "../../service/api.service";
 import { ConnectionService } from "../../service/connection.service";
@@ -18,7 +17,6 @@ import {IpService} from "../../service/ip.service";
   imports: [
     Button,
     FormsModule,
-    InputText,
     Dialog,
     ProgressBar,
     NgIf,
@@ -32,7 +30,7 @@ import {IpService} from "../../service/ip.service";
 export class LoginPageComponent implements OnInit {
 
   @Input() visible: boolean = false;
-  @Output() loginSuccess = new EventEmitter<{ ip: string, port: string }>();
+  @Output() loginSuccess = new EventEmitter<{ ip: string }>();
   @Output() loginFailed = new EventEmitter<boolean>();
   ifError: boolean = false;
   port: string;
@@ -45,11 +43,12 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("Login Page")
+    this.ipService.getIPs();
     this.getIpList();
   }
 
   getIpList(){
-    this.ipService.getIPs();
     const ipv4 = this.ipService.getIPv4();
     const ipv6List = this.ipService.getIPv6();
     if (ipv4) {
@@ -63,16 +62,16 @@ export class LoginPageComponent implements OnInit {
 
   getConnection() {
     this.isLoading = true;
-    this.connectionService.setConnection(this.selectedIp, this.port, false);
-    console.log('Connecting to', this.selectedIp, 'on port', this.port);
-    this.apiService.get(this.selectedIp, this.port).subscribe((data: ConnectionTCP) => {
+    this.connectionService.setConnection(this.selectedIp, false);
+    console.log('Connecting to', this.selectedIp);
+    this.apiService.get(this.selectedIp).subscribe((data: ConnectionTCP) => {
       console.log(data);
       this.isLoading = false;
       this.ifError = false;
-      this.loginSuccess.emit({ ip: this.selectedIp, port: this.port });
+      this.loginSuccess.emit({ ip: this.selectedIp });
       this.visible = false;
-      this.connectionService.setConnection(this.selectedIp, this.port, data.status);
-      this.connectionService.setConnection(this.selectedIp, this.port, data.status);
+      this.connectionService.setConnection(this.selectedIp, data.status);
+      this.connectionService.setConnection(this.selectedIp, data.status);
     }, error => {
       console.error('Connection error:', error);
       this.ifError = true;

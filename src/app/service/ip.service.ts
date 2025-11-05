@@ -46,6 +46,7 @@ export class IpService {
    * @returns {string} The IPv4 address.
    */
   getIPv4(): string {
+    console.log("IPV4", this.ipData.ipv4);
     return this.ipData.ipv4;
   }
 

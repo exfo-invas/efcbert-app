@@ -1,6 +1,7 @@
 <div>
   <p-dialog header="Connect to FCBERT Test Engine" [modal]="true" [(visible)]="visible" [closable]="true" (onHide)="onDialogHide()"
-    [style]="{ width: '35rem', height: '15rem' }">
+    [contentStyle]="{ 'overflow-y': 'visible' }"
+    [style]="{ width: '40rem'}">
     <div class="dialog-content">
       <div class="dialog-form-content">
         <table>
@@ -8,9 +9,10 @@
             <td><label for="ipaddress">IP Address: </label></td>
             <td>
               <p-inputgroup>
-                <p-select [(ngModel)]="selectedIp" [options]="ipLists" placeholder="IP Address" />
+                <p-select (click)="getIpList()" [(ngModel)]="selectedIp" [options]="ipLists" placeholder="IP Address" />
               </p-inputgroup>
             </td>
+            <p-button (click)="getIpList()" icon="pi pi-refresh" class="p-button-secondary" />
           </tr>
           <!-- <tr>
             <td><label for="port">Port: </label></td>
