@@ -14,7 +14,7 @@
             <p-skeleton width="5rem" styleClass="mb-2" />
           </td>
           <td *ngIf="!isNew">
-            {{ physicalColumns[col.field] }}
+            {{ physicalData[col.field] }}
           </td>
         </tr>
       </table>
@@ -29,7 +29,7 @@
           <td *ngIf="isNew">
             <p-skeleton width="5rem" styleClass="mb-2" />
           </td>
-          <td *ngIf="isNew">{{ wwnData[col.field] }}</td>
+          <td *ngIf="!isNew">{{ wwnData[col.field] }}</td>
         </tr>
       </table>
     </p-card>
