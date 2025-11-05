@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EventDisruptions, FrameLossResponse, HourlyEvent, LatencyEvent, StandardEvent, TrafficResponse } from './event.component.model';
+import { EventDisruptions, FrameLossResponse, HourlyEvent, HourlyStatus, LatencyEvent, StandardEvent, TrafficResponse } from './event.component.model';
 import {EventStatusService} from "../service/eventStatus.service";
 
 @Component({
@@ -59,38 +59,94 @@ export class EventComponent implements OnInit {
     { no: 1, utilization: '-', throughput: '-', latency: '-', framesLoss: '-' }
   ];
 
+  hourlyStatus: HourlyStatus = {
+    isReady: false,
+    hoursElapsed: 0
+  };
+
+  eventStatusBol: boolean = false;
+
+  apiStatus: boolean = false;
+
+  timeToNextHour: number = 0;
+
+  apiHourlyStatus: boolean = false;
+
   constructor(private eventStatus: EventStatusService) {
   }
 
   //Every Second, fetch the latest data for throughput, frame loss, service disruption, and traffic disruption
   ngOnInit(): void {
+    this.eventStatusBol = this.eventStatus.getEventStatus();
     this.eventStatus.getEventDetails();
     this.eventStatus.getHourlyEventDetails();
+
+    // initialize from any cached values in the service
+    if (this.eventStatus.eventDisruptions) {
+      this.getEventDisruptions(this.eventStatus.eventDisruptions);
+    }
+
+    if (this.eventStatus.hourlyEvent?.length) {
+      this.assignHourlyEventData(this.eventStatus.hourlyEvent);
+    }
+
+    // ensure hourlyEvents has default entries
     this.assignHourlyEvent();
+    this.startHourlyCounter();
 
     if (this.eventStatus.getEventStatus()) {
       setInterval(async () => {
         console.log('Fetching event details...');
+        this.apiStatus = true;
         const eventDisruptions = await this.eventStatus.getEventDetails();
         this.getEventDisruptions(eventDisruptions);
+        this.apiStatus = false;
         console.log('Event details skipped as event is not started.');
-      }, 10000); // 10000 ms = 10 seconds
+
+        this.hourlyStatus = eventDisruptions.hourlyStatus;
+        if (this.hourlyStatus.isReady) {
+          this.apiHourlyStatus = true;
+          console.log('Hourly status is ready, fetching hourly event details...');
+          const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
+          this.assignHourlyEventData(hourlyEventDetails);
+          this.apiHourlyStatus = false;
+        } else {
+          console.log('Hourly status is not ready yet.');
+        }
+      }, 3000); // 3000 ms = 3 seconds
     }
 
-    if (this.eventStatus.getEventStatus()) {
-      setInterval(async () => {
-        console.log('Fetching hourly event details...');
-        const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
-        this.assignHourlyEventData(hourlyEventDetails);
-        console.log('Hourly event details skipped as event is not started.');
-      }, 60000); // 60000 ms = 1 minute
+    // if (this.eventStatus.getEventStatus()) {
+    //   setInterval(async () => {
+    //     console.log('Fetching hourly event details...');
+    //     const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
+    //     this.assignHourlyEventData(hourlyEventDetails);
+    //     console.log('Hourly event details skipped as event is not started.');
+    //   }, 60000); //TODO: 60000 ms = 1 minute
+    // }
+  }
+
+  //start a counter when hourlyStatus.isReady is true and count from hourlyStatus.hoursElapsed to 1 hour
+  // this.hourlyStatus.hoursElapsed is in seconds
+  private startHourlyCounter(): void {
+    if (this.hourlyStatus.isReady) {
+      let hoursElapsed = this.hourlyStatus.hoursElapsed; // seconds
+      this.timeToNextHour = 3600 - (hoursElapsed % 3600);
+      const interval = setInterval(() => {
+        hoursElapsed++;
+        this.timeToNextHour = 3600 - (hoursElapsed % 3600);
+        if (hoursElapsed >= 3600) { // 3600 seconds = 1 hour
+          clearInterval(interval);
+        }
+      }, 1000); // 1000 ms = 1 second
     }
   }
 
   private getEventDisruptions(disruption: EventDisruptions): void {
     this.assignFrameLoss(disruption?.frameLoss);
     this.assignTrafficDisruption(disruption?.traffic);
-    this.assignStandardResponse(disruption?.standardEvent);
+    this.assignStandardResponse(disruption?.standard);
+    this.assignLatencyResponse(disruption?.latency);
   }
 
   private assignTrafficDisruption(response: TrafficResponse[]): void {
@@ -121,6 +177,15 @@ export class EventComponent implements OnInit {
     }
     if (response) {
       Object.assign(this.standardEvent, response);
+    }
+  }
+
+  private assignLatencyResponse(response: LatencyEvent): void {
+    if (!this.latencyEvent) {
+      this.latencyEvent = { last: '', min: '', max: '' } as LatencyEvent;
+    }
+    if (response) {
+      Object.assign(this.latencyEvent, response);
     }
   }
 

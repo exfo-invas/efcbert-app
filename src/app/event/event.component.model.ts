@@ -1,8 +1,9 @@
 export class EventDisruptions {
   frameLoss: FrameLossResponse[];
   traffic: TrafficResponse[];
-  standardEvent: StandardEvent;
-  latencyEvent: LatencyEvent;
+  standard: StandardEvent;
+  latency: LatencyEvent;
+  hourlyStatus: HourlyStatus;
 }
 
 export class FrameLossResponse {
@@ -30,6 +31,11 @@ export class LatencyEvent {
   last: string;
   min: string;
   max: string;
+}
+
+export class HourlyStatus {
+  isReady: boolean;
+  hoursElapsed: number;
 }
 
 export class HourlyEvent {
