@@ -12,9 +12,8 @@ export class ConnectionService {
   port: string;
   status: boolean;
 
-  setConnection(ipaddress: string, port: string, status: boolean) {
+  setConnection(ipaddress: string, status: boolean) {
     this.ipaddress = ipaddress;
-    this.port = port;
     this.status = status;
   }
 
