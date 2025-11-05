@@ -32,6 +32,8 @@ import {Ripple} from "primeng/ripple";
 import {Skeleton} from "primeng/skeleton";
 import { TimerComponent } from "./shared/timer/timer.component";
 import {TabPanel, TabView} from "primeng/tabview";
+import { IconField } from "primeng/iconfield";
+import {ProgressSpinner} from "primeng/progressspinner";
 
 @NgModule({
   declarations: [
@@ -66,8 +68,10 @@ import {TabPanel, TabView} from "primeng/tabview";
     Skeleton,
     TimerComponent,
     TabView,
-    TabPanel
-  ],
+    TabPanel,
+    IconField,
+    ProgressSpinner
+],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
