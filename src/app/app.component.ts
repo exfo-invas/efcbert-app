@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { LoggingService } from './logging/logging.service';
 import { IpService } from "./service/ip.service";
 import { EventStatusService } from "./service/eventStatus.service";
+import { PrintService } from './service/print.service';
 
 @Component({
   selector: 'app-root',
@@ -43,8 +44,9 @@ export class AppComponent implements OnInit {
   errorMessage: string;
   ipv4: string;
   ipv6: string[];
+  //printing: boolean = false;
 
-  constructor(private apiService: ApiService, private connectionService: ConnectionService, private router: Router, private loggingService: LoggingService, private ipService: IpService, private eventStatusService: EventStatusService) {
+  constructor(private apiService: ApiService, private connectionService: ConnectionService, private router: Router, private loggingService: LoggingService, private ipService: IpService, private eventStatusService: EventStatusService, private printService: PrintService) {
   }
 
   ngOnInit() {
@@ -54,7 +56,17 @@ export class AppComponent implements OnInit {
     setInterval(() => {
       this.connStatus = this.connectionService.getStatus();
     }, 300000); // 300000 ms = 5 minutes
+    //     if (!this.printing) {}
   }
+
+    //   exportPdf() {
+    //     // Prefer route-based export so components that aren't currently rendered get captured.
+    //     this.printing = true;
+    //     console.log('Exporting components to PDF via routes');
+    //     const routes = ['/home', '/event', '/logging'];
+    //     this.printService.exportRoutesToPdf(routes);
+    //     this.printing = false;
+    //   }
 
   openLoginDialog(dialog: boolean) {
     this.openLogin = dialog;
@@ -107,6 +119,7 @@ export class AppComponent implements OnInit {
         this.testStarted = false; // Reset testStarted to false after stopping the event
         this.trimerEvent = false; // Reset the timer event flag to false
         this.loggingService.addLog('Test Event stopped successfully');
+        //TODO: this.exportPdf();
       },
       error: (error) => {
         console.error('Error stopping event:', error);
