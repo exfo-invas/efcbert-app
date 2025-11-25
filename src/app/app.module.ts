@@ -1,39 +1,41 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {FormsModule} from "@angular/forms";
-import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
-import {EventComponent} from "./event/event.component";
-import {providePrimeNG} from "primeng/config";
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from "@angular/forms";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
+import { EventComponent } from "./event/event.component";
+import { providePrimeNG } from "primeng/config";
 import Material from "@primeng/themes/material";
-import {InputText} from "primeng/inputtext";
-import {Card} from "primeng/card";
-import {TableModule} from "primeng/table";
-import {Button} from "primeng/button";
-import {Message} from "primeng/message";
-import {Panel} from "primeng/panel";
-import {Tooltip} from "primeng/tooltip";
-import {Toast} from "primeng/toast";
-import {ConfirmPopup} from "primeng/confirmpopup";
-import {NgOptimizedImage} from "@angular/common";
-import {LoginPageComponent} from "./shared/login-page/login-page.component";
-import {ServerStatusComponent} from "./shared/server-status/server-status.component";
-import {Rating} from "primeng/rating";
-import {Tag} from "primeng/tag";
-import {Divider} from "primeng/divider";
-import {Menu} from "primeng/menu";
-import {MegaMenu} from "primeng/megamenu";
-import {Ripple} from "primeng/ripple";
-import {Skeleton} from "primeng/skeleton";
+import { InputText } from "primeng/inputtext";
+import { Card } from "primeng/card";
+import { TableModule } from "primeng/table";
+import { Button } from "primeng/button";
+import { Message } from "primeng/message";
+import { Panel } from "primeng/panel";
+import { Tooltip } from "primeng/tooltip";
+import { Toast } from "primeng/toast";
+import { ConfirmPopup } from "primeng/confirmpopup";
+import { NgOptimizedImage } from "@angular/common";
+import { LoginPageComponent } from "./shared/login-page/login-page.component";
+import { ServerStatusComponent } from "./shared/server-status/server-status.component";
+import { KeyServiceComponent } from './shared/key-service/key-service.component';
+import { Dialog } from 'primeng/dialog';
+import { Rating } from "primeng/rating";
+import { Tag } from "primeng/tag";
+import { Divider } from "primeng/divider";
+import { Menu } from "primeng/menu";
+import { MegaMenu } from "primeng/megamenu";
+import { Ripple } from "primeng/ripple";
+import { Skeleton } from "primeng/skeleton";
 import { TimerComponent } from "./shared/timer/timer.component";
-import {TabPanel, TabView} from "primeng/tabview";
+import { TabPanel, TabView } from "primeng/tabview";
 import { IconField } from "primeng/iconfield";
-import {ProgressSpinner} from "primeng/progressspinner";
+import { ProgressSpinner } from "primeng/progressspinner";
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import {ProgressSpinner} from "primeng/progressspinner";
     NgOptimizedImage,
     LoginPageComponent,
     ServerStatusComponent,
+    KeyServiceComponent,
+    Dialog,
     Rating,
     Tag,
     Divider,
@@ -71,7 +75,7 @@ import {ProgressSpinner} from "primeng/progressspinner";
     TabPanel,
     IconField,
     ProgressSpinner
-],
+  ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
