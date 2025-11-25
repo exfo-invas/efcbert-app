@@ -5,4 +5,8 @@
   "description": "Angular CLI + Electron",
   "main": "electron.prod.js",
   "license": "MIT"
+  ,"dependencies": {
+    "jsonwebtoken": "*",
+    "node-macaddress": "*"
+  }
 }
