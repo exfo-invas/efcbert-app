@@ -101,10 +101,10 @@
     </p-tabPanel>
 
     <p-tabPanel header="Hourly Event">
-      <p-table [value]="hourlyEvents" [scrollable]="true" scrollHeight="300px" [size]="'small'">
+      <p-table [value]="hourlyEvents" [scrollable]="false" [size]="'small'">
         <ng-template #caption>
           <div class="heading">
-            <div class="tags">
+            <div class="tags no-print">
               <p-tag severity="danger" *ngIf="!eventStatusBol" value="Test Not Started" />
               <p-tag severity="info" *ngIf="eventStatusBol" value="Time to Next Hour: {{ timeToNextHour }}" />
               <p-progress-spinner *ngIf="apiStatus" strokeWidth="8" fill="transparent" animationDuration=".5s"
