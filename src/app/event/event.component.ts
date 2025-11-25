@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EventDisruptions, FrameLossResponse, HourlyEvent, HourlyStatus, LatencyEvent, StandardEvent, TrafficResponse } from './event.component.model';
-import {EventStatusService} from "../service/eventStatus.service";
+import { EventStatusService } from "../service/eventStatus.service";
 
 @Component({
   selector: 'app-event',
@@ -15,10 +15,10 @@ export class EventComponent implements OnInit {
     min: '-',
     max: '-'
   }
-  
+
   standardEvent: StandardEvent = {
     fcRate: '-',
-    frameSize: '-' 
+    frameSize: '-'
   }
 
   trafficDisruptions: TrafficResponse[] = [
@@ -54,7 +54,7 @@ export class EventComponent implements OnInit {
       frameLossRate: 0
     }
   ]
-  
+
   hourlyEvents: HourlyEvent[] = [
     { no: 1, utilization: '-', throughput: '-', latency: '-', framesLoss: '-' }
   ];
@@ -95,25 +95,27 @@ export class EventComponent implements OnInit {
     this.startHourlyCounter();
 
     if (this.eventStatus.getEventStatus()) {
-      setInterval(async () => {
-        console.log('Fetching event details...');
-        this.apiStatus = true;
-        const eventDisruptions = await this.eventStatus.getEventDetails();
-        this.getEventDisruptions(eventDisruptions);
-        this.apiStatus = false;
-        console.log('Event details skipped as event is not started.');
+      if (!this.eventStatus.getIsPrinting()) {
+        setInterval(async () => {
+          console.log('Fetching event details...');
+          this.apiStatus = true;
+          const eventDisruptions = await this.eventStatus.getEventDetails();
+          this.getEventDisruptions(eventDisruptions);
+          this.apiStatus = false;
+          console.log('Event details skipped as event is not started.');
 
-        this.hourlyStatus = eventDisruptions.hourlyStatus;
-        if (this.hourlyStatus.isReady) {
-          this.apiHourlyStatus = true;
-          console.log('Hourly status is ready, fetching hourly event details...');
-          const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
-          this.assignHourlyEventData(hourlyEventDetails);
-          this.apiHourlyStatus = false;
-        } else {
-          console.log('Hourly status is not ready yet.');
-        }
-      }, 3000); // 3000 ms = 3 seconds
+          this.hourlyStatus = eventDisruptions.hourlyStatus;
+          if (this.hourlyStatus.isReady) {
+            this.apiHourlyStatus = true;
+            console.log('Hourly status is ready, fetching hourly event details...');
+            const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
+            this.assignHourlyEventData(hourlyEventDetails);
+            this.apiHourlyStatus = false;
+          } else {
+            console.log('Hourly status is not ready yet.');
+          }
+        }, 3000); // 3000 ms = 3 seconds
+      }
     }
 
     // if (this.eventStatus.getEventStatus()) {

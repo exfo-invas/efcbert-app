@@ -7,10 +7,28 @@ import { firstValueFrom } from "rxjs";
 @Injectable({ providedIn: 'root' })
 export class EventStatusService {
   private eventStatus: boolean = false;
+  private isPrinting: boolean = false;
   eventDisruptions: EventDisruptions;
   hourlyEvent: HourlyEvent[] = [];
+  private FullStatusData: any;
 
   constructor(private apiService: ApiService, private loggingService: LoggingService) {
+  }
+
+  setFullStatusData(data: any): void {
+    this.FullStatusData = data;
+  }
+
+  getFullStatusData(): any {
+    return this.FullStatusData;
+  }
+
+  setIsPrinting(isPrinting: boolean): void {
+    this.isPrinting = isPrinting;
+  }
+
+  getIsPrinting(): boolean {
+    return this.isPrinting;
   }
 
   setEventStatus(status: boolean): void {
