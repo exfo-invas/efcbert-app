@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../service/api.service';
 import { LoggingService } from '../logging/logging.service';
+import { EventStatusService } from '../service/eventStatus.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -57,22 +58,26 @@ export class DashboardComponent implements OnInit {
     trafficShaping: ''
   };
 
-  constructor(private apiService: ApiService, private loggingService: LoggingService) {
-    this.getFullStatusData();
+  constructor(private apiService: ApiService, private loggingService: LoggingService, private eventStatusService: EventStatusService) {
+    this.saveData(this.eventStatusService.getFullStatusData());
   }
 
   ngOnInit() {
-    this.getFullStatusData();
+    this.saveData(this.eventStatusService.getFullStatusData());
+    if (!this.eventStatusService.getIsPrinting()) {
+      this.getFullStatusData();
+    }
   }
 
   getFullStatusData() {
     this.apiService.getStatus().subscribe((data: any) => {
       if (data) {
-        this.isNew = false;
-        this.physicalData = data.physicalStatus;
-        this.wwnData = data.portStatus;
-        this.deviceConfigData = data.toolStatus;
-        this.pspLink = data.pspLinkStatus || '';
+        // this.physicalData = data.physicalStatus;
+        // this.wwnData = data.portStatus;
+        // this.deviceConfigData = data.toolStatus;
+        // this.pspLink = data.pspLinkStatus || '';
+        this.eventStatusService.setFullStatusData(data);
+        this.saveData(data);
         this.loggingService.addLog('Full status data fetched successfully');
       } else {
         this.isNew = true;
@@ -81,5 +86,17 @@ export class DashboardComponent implements OnInit {
       console.error('Error fetching full status data:', error);
       this.isNew = true;
     });
+  }
+
+  saveData(data: any) {
+    if (data) {
+      this.isNew = false;
+      this.physicalData = data.physicalStatus;
+      this.wwnData = data.portStatus;
+      this.deviceConfigData = data.toolStatus;
+      this.pspLink = data.pspLinkStatus || '';
+    } else {
+      this.isNew = true;
+    }
   }
 }
