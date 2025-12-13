@@ -1,4 +1,6 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const path = require('path');
+const fs = require('fs');
 const {exec, spawn } = require("child_process");
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -16,7 +18,9 @@ const createWindow = () => {
       height: 600,
       icon: "./src/favicon.ico",
       webPreferences: {
-        nodeIntegration: false, // turn it on to use node features
+        nodeIntegration: false, // keep disabled for security; use preload to expose IPC
+        contextIsolation: true,
+        preload: path.join(__dirname, 'preload.js')
       },
     });
 
@@ -46,6 +50,66 @@ app.on("ready", () => {
   console.log("App is ready for dev.");
 });
 
+ipcMain.handle('start-server', async () => {
+  try {
+    const result = startServer();
+    return { success: true, result };
+  } catch (err) {
+    console.error('Failed to start server via IPC (dev):', err);
+    return { success: false, error: err && err.message ? err.message : String(err) };
+  }
+});
+
+// Save PDF to Desktop/EnhancedFcbert/DD-MM-YYYY/<filename>.pdf
+ipcMain.handle('save-pdf', async (event, { filename, dateFolder, dataBase64 }) => {
+  try {
+    const desktop = app.getPath('desktop');
+    const dir = path.join(desktop, 'EnhancedFcbert', dateFolder || '');
+    fs.mkdirSync(dir, { recursive: true });
+    const filePath = path.join(dir, filename);
+    console.log(`save-pdf invoked: filename=${filename}, dateFolder=${dateFolder || 'none'}, base64Size=${dataBase64 ? dataBase64.length : 0}`);
+    fs.writeFileSync(filePath, Buffer.from(dataBase64, 'base64'));
+    console.log(`Saved PDF at ${filePath} (dev)`);
+    return { success: true, path: filePath };
+  } catch (err) {
+    console.error('Failed to save PDF via IPC (dev):', err);
+    return { success: false, error: err && err.message ? err.message : String(err) };
+  }
+});
+
+ipcMain.handle('open-pdf', async (event, { path: filePath }) => {
+  try {
+    if (!filePath) return { success: false, error: 'Invalid file path' };
+    try {
+      // Launch default PDF application to open the file (safer than creating a window)
+      const openResp = await shell.openPath(filePath);
+      if (openResp) {
+        console.warn('shell.openPath returned an error:', openResp);
+      }
+      return { success: true };
+    } catch (err) {
+      console.error('shell.openPath failed:', err);
+      return { success: false, error: err && err.message ? err.message : String(err) };
+    }
+    previewWin.on('closed', () => {});
+    return { success: true };
+  } catch (err) {
+    console.error('Failed to open PDF via IPC (dev):', err);
+    return { success: false, error: err && err.message ? err.message : String(err) };
+  }
+});
+
+ipcMain.handle('reveal-pdf', async (event, { path: filePath }) => {
+  try {
+    if (!filePath) return { success: false, error: 'Invalid file path' };
+    shell.showItemInFolder(path.resolve(filePath));
+    return { success: true };
+  } catch (err) {
+    console.error('Failed to reveal PDF via IPC (dev):', err);
+    return { success: false, error: err && err.message ? err.message : String(err) };
+  }
+});
+
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
@@ -73,23 +137,30 @@ app.on("before-quit", () => {
 });
 
 
-//
 /// Server management functions
 const startServer = () => {
+  return new Promise((resolve, reject) => {
+    stopServer();
 
-  const startCommand = 'java -jar ./src/FCBert-0.0.1-SNAPSHOT.jar';
+    const startCommand = 'java -jar ./resources/app/FCBert-0.0.1-SNAPSHOT.jar';
+    console.log(startCommand);
 
-  let status= false;
-  exec(startCommand, (error, stdout, stderr) => {
-    if (error) {
+    try {
+      exec(startCommand, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error starting server: ${error.message}`);
+          reject(error);
+        } else {
+          console.log(`Server started: ${stdout}`);
+          if (stderr) console.error(`stderr: ${stderr}`);
+          resolve({stdout, stderr});
+        }
+      });
+    } catch (error) {
       console.error(`Error starting server: ${error.message}`);
-    } else {
-      console.log(`Server started: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
-      status = true;
+      reject(error);
     }
   });
-  return status;
 }
 
 const stopServer = () => {
