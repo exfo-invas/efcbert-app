@@ -33,6 +33,7 @@ import { MegaMenu } from "primeng/megamenu";
 import { Ripple } from "primeng/ripple";
 import { Skeleton } from "primeng/skeleton";
 import { TimerComponent } from "./shared/timer/timer.component";
+import { PrintPreviewComponent } from "./shared/print-preview/print-preview.component";
 import { TabPanel, TabView } from "primeng/tabview";
 import { IconField } from "primeng/iconfield";
 import { ProgressSpinner } from "primeng/progressspinner";
@@ -71,6 +72,7 @@ import { ProgressSpinner } from "primeng/progressspinner";
     Ripple,
     Skeleton,
     TimerComponent,
+    PrintPreviewComponent,
     TabView,
     TabPanel,
     IconField,
