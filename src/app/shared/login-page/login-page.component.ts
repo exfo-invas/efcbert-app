@@ -49,6 +49,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   getIpList(){
+    this.ipService.getIPs();
     const ipv4 = this.ipService.getIPv4();
     const ipv6List = this.ipService.getIPv6();
     if (ipv4) {
