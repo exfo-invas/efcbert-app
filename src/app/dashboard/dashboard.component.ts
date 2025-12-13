@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, NgZone } from '@angular/core';
 import { ApiService } from '../service/api.service';
 import { LoggingService } from '../logging/logging.service';
 import { EventStatusService } from '../service/eventStatus.service';
@@ -58,20 +58,44 @@ export class DashboardComponent implements OnInit {
     trafficShaping: ''
   };
 
-  constructor(private apiService: ApiService, private loggingService: LoggingService, private eventStatusService: EventStatusService) {
+  constructor(private apiService: ApiService, private loggingService: LoggingService, private eventStatusService: EventStatusService, private cdr: ChangeDetectorRef, private zone: NgZone) {
     this.saveData(this.eventStatusService.getFullStatusData());
   }
 
+  showPreview = false;
+
   ngOnInit() {
+    this.eventStatusService.connectionStatus.subscribe((status: boolean) => {
+      // Ensure any UI updates happen inside Angular zone so Electron/IPC events trigger change detection
+      this.zone.run(() => {
+        if (status) {
+          // If we already have full status data, use it; otherwise fetch from API
+          const data = this.eventStatusService.getFullStatusData();
+          if (data) {
+            this.saveData(data);
+          } else {
+            this.getFullStatusData();
+          }
+        } else {
+          // mark as new / disconnected
+          this.isNew = true;
+        }
+        this.cdr.detectChanges();
+      });
+    });
     this.saveData(this.eventStatusService.getFullStatusData());
     if (!this.eventStatusService.getIsPrinting()) {
       this.getFullStatusData();
     }
   }
 
+  public openPreview(): void {
+    this.showPreview = !this.showPreview;
+  }
+
   getFullStatusData() {
     this.apiService.getStatus().subscribe((data: any) => {
-      if (data) {
+      if (!(data.pspLinkStatus === "Connection is not established")) {
         // this.physicalData = data.physicalStatus;
         // this.wwnData = data.portStatus;
         // this.deviceConfigData = data.toolStatus;
@@ -90,11 +114,13 @@ export class DashboardComponent implements OnInit {
 
   saveData(data: any) {
     if (data) {
-      this.isNew = false;
-      this.physicalData = data.physicalStatus;
-      this.wwnData = data.portStatus;
-      this.deviceConfigData = data.toolStatus;
-      this.pspLink = data.pspLinkStatus || '';
+      this.zone.run(() => {
+        this.isNew = false;
+        this.physicalData = data.physicalStatus;
+        this.wwnData = data.portStatus;
+        this.deviceConfigData = data.toolStatus;
+        this.pspLink = data.pspLinkStatus || '';
+      });
     } else {
       this.isNew = true;
     }
