@@ -35,7 +35,7 @@ export class LatencyEvent {
 
 export class HourlyStatus {
   isReady: boolean;
-  hoursElapsed: number;
+  hoursElapsed: string;
 }
 
 export class HourlyEvent {
