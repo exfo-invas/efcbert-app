@@ -2,10 +2,14 @@ import { Injectable } from "@angular/core";
 import { EventDisruptions, FrameLossResponse, HourlyEvent, HourlyStatus, LatencyEvent, StandardEvent, TrafficResponse } from "../event/event.component.model";
 import { LoggingService } from "../logging/logging.service";
 import { ApiService } from "./api.service";
-import { firstValueFrom } from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class EventStatusService {
+  
+  connectionStatus = new BehaviorSubject<boolean>(false);
+
+
   private eventStatus: boolean = false;
   private isPrinting: boolean = false;
   eventDisruptions: EventDisruptions;
@@ -37,6 +41,14 @@ export class EventStatusService {
 
   getEventStatus(): boolean {
     return this.eventStatus;
+  }
+
+  getEventDisruptions(): EventDisruptions {
+    return this.eventDisruptions;
+  }
+
+  getHourlyEvent(): HourlyEvent[] {
+    return this.hourlyEvent;
   }
 
   async getEventDetails(): Promise<EventDisruptions> {
