@@ -21,6 +21,12 @@ export class AppComponent implements OnInit {
   isLoading: boolean = false; // Loading state for the button
   testStarted: boolean = false; // Flag to indicate if the test has started
   trimerEvent: boolean = false; // Flag to indicate if the timer event is active
+  health: boolean = false;
+  serverLoading: boolean = false;
+  maxTimeout: boolean = false; // 3 minutes timeout
+  count: number = 0;
+
+  POLL_INTERVAL_MS: number = 3000; // 3 seconds
 
   items: MegaMenuItem[] = [
     {
