@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { EventDisruptions, FrameLossResponse, HourlyEvent, HourlyStatus, LatencyEvent, StandardEvent, TrafficResponse } from './event.component.model';
 import { EventStatusService } from "../service/eventStatus.service";
+import { ConnectionService } from '../service/connection.service';
 
 @Component({
   selector: 'app-event',
@@ -8,7 +9,10 @@ import { EventStatusService } from "../service/eventStatus.service";
   styleUrl: './event.component.scss',
   standalone: false
 })
-export class EventComponent implements OnInit {
+export class EventComponent implements OnInit, OnDestroy {
+  private pollingIntervalId?: any;
+  private readonly POLL_INTERVAL_MS = 3000; // 3 seconds
+  private hourlyCounterIntervalId?: any;
 
   latencyEvent: LatencyEvent = {
     last: '-',
@@ -61,7 +65,7 @@ export class EventComponent implements OnInit {
 
   hourlyStatus: HourlyStatus = {
     isReady: false,
-    hoursElapsed: 0
+    hoursElapsed: ""
   };
 
   eventStatusBol: boolean = false;
@@ -71,76 +75,66 @@ export class EventComponent implements OnInit {
   timeToNextHour: number = 0;
 
   apiHourlyStatus: boolean = false;
+  router: any;
 
-  constructor(private eventStatus: EventStatusService) {
+  constructor(private eventStatus: EventStatusService, private connectionService: ConnectionService, private cdr: ChangeDetectorRef, private zone: NgZone) {
   }
 
   //Every Second, fetch the latest data for throughput, frame loss, service disruption, and traffic disruption
   ngOnInit(): void {
-    this.eventStatusBol = this.eventStatus.getEventStatus();
-    this.eventStatus.getEventDetails();
-    this.eventStatus.getHourlyEventDetails();
-
-    // initialize from any cached values in the service
-    if (this.eventStatus.eventDisruptions) {
-      this.getEventDisruptions(this.eventStatus.eventDisruptions);
+    // Only enable polling if the backend is healthy
+    if (!this.connectionService.getHealth()) {
+      return;
     }
 
-    if (this.eventStatus.hourlyEvent?.length) {
-      this.assignHourlyEventData(this.eventStatus.hourlyEvent);
-    }
+    this.eventStatus.connectionStatus.subscribe(() => {
+      // Trigger change detection when connection status changes
+
+      this.eventStatusBol = this.connectionService.getStatus();
+      if (this.eventStatusBol) {
+        this.startPolling();
+      } else {
+        this.stopPolling();
+      }
+      this.cdr.detectChanges();
+    });
+
+
+    this.zone.run(() => {
+      // Load initial data from the service and apply it to the view
+      this.eventStatus.getEventDetails().then((initialDisruptions) => {
+        if (initialDisruptions) {
+          this.cdr.detectChanges();
+          this.getEventDisruptions(initialDisruptions);
+          this.hourlyStatus = initialDisruptions.hourlyStatus;
+        }
+      }).catch((err) => console.error('Initial event details fetch failed:', err));
+
+      this.eventStatus.getHourlyEventDetails().then((initialHourly) => {
+        if (initialHourly?.length) {
+          this.assignHourlyEventData(initialHourly);
+          this.cdr.detectChanges();
+          this.refreshComponent();
+        }
+      }).catch((err) => console.error('Initial hourly event fetch failed:', err));
+    });
 
     // ensure hourlyEvents has default entries
     this.assignHourlyEvent();
-    this.startHourlyCounter();
-
-    if (this.eventStatus.getEventStatus()) {
-      if (!this.eventStatus.getIsPrinting()) {
-        setInterval(async () => {
-          console.log('Fetching event details...');
-          this.apiStatus = true;
-          const eventDisruptions = await this.eventStatus.getEventDetails();
-          this.getEventDisruptions(eventDisruptions);
-          this.apiStatus = false;
-          console.log('Event details skipped as event is not started.');
-
-          this.hourlyStatus = eventDisruptions.hourlyStatus;
-          if (this.hourlyStatus.isReady) {
-            this.apiHourlyStatus = true;
-            console.log('Hourly status is ready, fetching hourly event details...');
-            const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
-            this.assignHourlyEventData(hourlyEventDetails);
-            this.apiHourlyStatus = false;
-          } else {
-            console.log('Hourly status is not ready yet.');
-          }
-        }, 3000); // 3000 ms = 3 seconds
-      }
-    }
-
-    // if (this.eventStatus.getEventStatus()) {
-    //   setInterval(async () => {
-    //     console.log('Fetching hourly event details...');
-    //     const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
-    //     this.assignHourlyEventData(hourlyEventDetails);
-    //     console.log('Hourly event details skipped as event is not started.');
-    //   }, 60000); //TODO: 60000 ms = 1 minute
-    // }
   }
 
-  //start a counter when hourlyStatus.isReady is true and count from hourlyStatus.hoursElapsed to 1 hour
-  // this.hourlyStatus.hoursElapsed is in seconds
-  private startHourlyCounter(): void {
-    if (this.hourlyStatus.isReady) {
-      let hoursElapsed = this.hourlyStatus.hoursElapsed; // seconds
-      this.timeToNextHour = 3600 - (hoursElapsed % 3600);
-      const interval = setInterval(() => {
-        hoursElapsed++;
-        this.timeToNextHour = 3600 - (hoursElapsed % 3600);
-        if (hoursElapsed >= 3600) { // 3600 seconds = 1 hour
-          clearInterval(interval);
-        }
-      }, 1000); // 1000 ms = 1 second
+  refreshComponent() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.stopPolling();
+    if (this.hourlyCounterIntervalId) {
+      clearInterval(this.hourlyCounterIntervalId);
+      this.hourlyCounterIntervalId = undefined;
     }
   }
 
@@ -194,6 +188,7 @@ export class EventComponent implements OnInit {
   //if HourlyEvent data is less than 10 entries, add dummy data
   private assignHourlyEventData(response: HourlyEvent[]): void {
     Object.assign(this.hourlyEvents, response);
+    this.cdr.detectChanges();
   }
 
   private assignHourlyEvent(): HourlyEvent[] {
@@ -202,5 +197,54 @@ export class EventComponent implements OnInit {
       this.hourlyEvents.push({ no: i, utilization: '-', throughput: '-', latency: '-', framesLoss: '-' });
     }
     return this.hourlyEvents;
+  }
+
+  private startPolling(): void {
+    // Prevent multiple timers
+    if (this.pollingIntervalId) {
+      return;
+    }
+    this.pollingIntervalId = setInterval(() => {
+      void this.pollIteration();
+    }, this.POLL_INTERVAL_MS);
+  }
+
+  private stopPolling(): void {
+    if (this.pollingIntervalId) {
+      clearInterval(this.pollingIntervalId);
+      this.pollingIntervalId = undefined;
+    }
+  }
+
+  private async pollIteration(): Promise<void> {
+    try {
+      if (!this.eventStatus.getEventStatus()) {
+        // If event is not active, no need to poll
+        return;
+      }
+
+      this.zone.run(async () => {
+        // fetch latest event disruptions
+        this.apiStatus = true;
+        const eventDisruptions = await this.eventStatus.getEventDetails();
+        this.getEventDisruptions(eventDisruptions);
+        this.apiStatus = false;
+
+        // update hourly status and fetch hourly events if ready
+        this.hourlyStatus = eventDisruptions.hourlyStatus;
+        if (this.hourlyStatus && this.hourlyStatus.isReady) {
+          this.apiHourlyStatus = true;
+          const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
+          this.assignHourlyEventData(hourlyEventDetails);
+          this.apiHourlyStatus = false;
+        }
+        this.cdr.detectChanges();                     // Will work **only inside zone**
+      });
+
+    } catch (error) {
+      console.error('Error during polling iteration:', error);
+      this.apiStatus = false;
+      this.apiHourlyStatus = false;
+    }
   }
 }
