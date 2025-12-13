@@ -63,7 +63,7 @@
             <th style="text-align: center;">Byte Count</th>
             <th style="text-align: center;">Frame Rate</th>
             <th style="text-align: center;">Frame Count</th>
-            <th style="text-align: center;">Frame Loss Rate</th>
+            <th style="text-align: center;">Frame Loss Rate (%)</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row>
@@ -80,12 +80,12 @@
       <p-table [value]="[latencyEvent]" responsiveLayout="scroll" [size]="'small'">
         <ng-template #caption>
           <div class="flex items-center justify-between padding-0">
-            <strong>Latency</strong>
+            <strong>Latency (ms)</strong>
           </div>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th style="text-align: center;">Last</th>
+            <th style="text-align: center;">Current</th>
             <th style="text-align: center;">Min</th>
             <th style="text-align: center;">Max</th>
           </tr>
@@ -105,8 +105,8 @@
         <ng-template #caption>
           <div class="heading">
             <div class="tags no-print">
-              <p-tag severity="danger" *ngIf="!eventStatusBol" value="Test Not Started" />
-              <p-tag severity="info" *ngIf="eventStatusBol" value="Time to Next Hour: {{ timeToNextHour }}" />
+              <!-- <p-tag severity="danger" *ngIf="!eventStatusBol" value="Test Not Started" />
+              <p-tag severity="info" *ngIf="eventStatusBol" value="Time to Next Hour: {{ timeToNextHour }}" /> -->
               <p-progress-spinner *ngIf="apiStatus" strokeWidth="8" fill="transparent" animationDuration=".5s"
                 [style]="{ width: '20px', height: '20px' }"></p-progress-spinner>
             </div>
@@ -116,9 +116,9 @@
         <ng-template pTemplate="header">
           <tr>
             <th>Hour No.</th>
-            <th>Utilization</th>
-            <th>Throughput</th>
-            <th>Latency</th>
+            <th>Line Utilization (%)</th>
+            <th>Throughput (Mbps)</th>
+            <th>Latency (ms)</th>
             <th>Frames loss rate(%)</th>
           </tr>
         </ng-template>
