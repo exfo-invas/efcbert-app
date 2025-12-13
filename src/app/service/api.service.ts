@@ -17,6 +17,12 @@ export class ApiService {
 
   telnetContext = 'telnet';
 
+  public healthCheck() {
+    const url = this.baseUrl + '/' + 'actuator/health';
+    console.log(url);
+    return this.http.get(url, {responseType: 'json'});
+  }
+
   //method to send http request to the server
   public get(url: string) {
     const path = '/telnet/connect/{ip}';
@@ -93,6 +99,24 @@ export class ApiService {
     const url = this.baseUrl + path;
     console.log(url);
     return this.http.get(url, {responseType: 'json'});
+  }
+
+  resetConnetion() {
+    const url = this.baseUrl + '/config' + '/test/reset';
+    console.log(url);
+    this.http.get(url, {responseType: 'text'}).subscribe({ next: (data: string) => {
+      console.log('Connection reset successfully:', data);
+    },
+      error: (error) => {
+        console.error('Error resetting connection:', error);
+      }
+    });
+  }
+
+  restartServer() {
+    const url = this.baseUrl + '/' + 'actuator/shutdown';
+    console.log('ApiService: restartServer request to URL:', url);
+    return this.http.post(url, {}, {responseType: 'json'});
   }
 
 }
