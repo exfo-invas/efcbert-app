@@ -33,6 +33,7 @@
     "zone.js": "^0.15.0",
     "jspdf": "^2.5.1",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.9.3",
     "jsonwebtoken": "*",
     "macaddress": "*"
   },
