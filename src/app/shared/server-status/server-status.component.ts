@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Button} from "primeng/button";
 import {NgIf} from "@angular/common";
 import {Tooltip} from "primeng/tooltip";
-import {Dialog} from "primeng/dialog";
+import { LoginPageComponent } from "../login-page/login-page.component";
 
 @Component({
   selector: 'app-server-status',
@@ -10,8 +10,8 @@ import {Dialog} from "primeng/dialog";
     Button,
     NgIf,
     Tooltip,
-    Dialog
-  ],
+    LoginPageComponent
+],
   templateUrl: './server-status.component.html',
   styleUrl: './server-status.component.scss'
 })
@@ -24,6 +24,8 @@ export class ServerStatusComponent implements OnInit {
   }
 
   @Input() connStatus: boolean;
+  @Output() loginSuccess = new EventEmitter<{ ip: string }>();
+  @Output() loginFailed = new EventEmitter<boolean>();
 
   visible: boolean = false;
   ipaddress: string;
@@ -31,5 +33,10 @@ export class ServerStatusComponent implements OnInit {
 
   showDialog() {
     this.visible = true;
+  }
+
+  closeDialog(event: boolean) {
+    this.visible = false;
+    this.loginFailed.emit(event);
   }
 }

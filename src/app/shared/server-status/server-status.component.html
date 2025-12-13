@@ -9,13 +9,14 @@
                 iconPos="left" severity="danger" label="Disconnected"
                 (click)="showDialog()"
       />
+      <app-login-page [visible]="visible" (loginSuccess)="loginSuccess.emit($event)" (loginFailed)="closeDialog($event)"/>
 
-      <p-dialog header="Disconnected from testing tool" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+      <!-- <p-dialog header="Disconnected from testing tool" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
         <div>
           <p> Attempt to re-connect : <b>{{ipaddress}}</b>:<b>{{port}}</b> </p>
           <p-button label="Save" (click)="visible"/>
         </div>
-      </p-dialog>
+      </p-dialog> -->
   </div>
 
 </div>
