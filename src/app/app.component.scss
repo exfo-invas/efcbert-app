@@ -32,7 +32,8 @@
 .main-content {
   display: flex;
   flex-direction: row;
-  height: 90vh;
+  height: 89vh;
+  width: 98%;
   align-items: center;
 }
 
@@ -40,6 +41,7 @@
   width: 85%;
   height: 90vh;
   padding: 20px;
+  padding-top: 0px;
   overflow-y: auto;
   margin-right: 1%;
 }

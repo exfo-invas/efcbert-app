@@ -157,6 +157,7 @@ export class AppComponent implements OnInit {
     this.openLogin = false;
     this.suiteConn = true; // Enable the button after a successful login
     // You can add additional logic here if needed after a successful login
+    this.eventStatusService.connectionStatus.next(true);
   }
 
   startEvent() {
@@ -168,7 +169,7 @@ export class AppComponent implements OnInit {
         // You can add additional logic here if needed after starting the event
         if (data === 'true') {
           this.eventStatusService.setEventStatus(true)
-          this.loggingService.addLog('Test Event started successfully');
+          this.loggingService.addLog('AppComponent: Test Event started successfully');
           this.connStatus = true; // Update connection status to true
           this.suiteConn = true; // Enable the button after starting the event
           this.testStarted = true; // Set testStarted to true after starting the event
@@ -189,21 +190,6 @@ export class AppComponent implements OnInit {
     this.serverLoading = true;
 
     if (this.health) {
-      // this.apiService.restartServer().subscribe({
-      //   next: (data: any) => {
-      //     console.log('Server restarted successfully:', data);
-      //     if(data.message === 'Shutting down, bye...') {
-      //       this.connectionService.resetCount();
-      //       this.startServer();
-      //       this.maxTimeout = false;
-      //     }
-      //   },
-      //   error: (error) => {
-      //     console.error('Error restarting server:', error);
-      //     this.ifError = true;
-      //     this.errorMessage = 'Failed to restart the server. Please try again later.';
-      //   }
-      // });
       this.startServer();
     }
     this.getAppHealth();
@@ -211,12 +197,15 @@ export class AppComponent implements OnInit {
 
   // Add this method to fix the missing stopEvent error
   stopEvent(): void {
-    this.printService.generateReportWithPopup();
     // TODO: Implement stop logic here
     this.apiService.eventHandler(false).subscribe({
       next: (data: any) => {
         console.log('Event stopped successfully:', data);
+        this.loggingService.addLog('AppComponent: Test Event stopped successfully');
+        this.eventStatusService.connectionStatus.next(false);
         this.eventStatusService.setEventStatus(false);
+        this.print();
+        this.eventStatusService.resetEventData();
         this.testStarted = false; // Reset testStarted to false after stopping the event
         this.trimerEvent = false; // Reset the timer event flag to false
         this.loggingService.addLog('Test Event stopped successfully');
@@ -231,6 +220,7 @@ export class AppComponent implements OnInit {
   }
 
   public print() {
+    this.eventStatusService.getFileRecords();
     this.printService.generateReportWithPopup();
   }
 }
