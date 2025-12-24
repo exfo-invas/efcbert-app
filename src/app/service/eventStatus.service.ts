@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { EventDisruptions, FrameLossResponse, HourlyEvent, HourlyStatus, LatencyEvent, StandardEvent, TrafficResponse } from "../event/event.component.model";
+import { EventDisruptions, FileDetails, FrameLossResponse, HourlyEvent, HourlyStatus, LatencyEvent, StandardEvent, TrafficResponse } from "../event/event.component.model";
 import { LoggingService } from "../logging/logging.service";
 import { ApiService } from "./api.service";
 import { BehaviorSubject, firstValueFrom } from "rxjs";
@@ -15,8 +15,13 @@ export class EventStatusService {
   eventDisruptions: EventDisruptions;
   hourlyEvent: HourlyEvent[] = [];
   private FullStatusData: any;
+  private fileRecords: FileDetails;
 
   constructor(private apiService: ApiService, private loggingService: LoggingService) {
+  }
+
+  getFileRecordsData(): FileDetails {
+    return this.fileRecords;
   }
 
   setFullStatusData(data: any): void {
@@ -51,11 +56,28 @@ export class EventStatusService {
     return this.hourlyEvent;
   }
 
+  //Reset event data
+  resetEventData(): void {
+    this.eventDisruptions = null;
+    this.hourlyEvent = [];
+  }
+
+  getFileRecords(): void {
+    this.apiService.getFileRecords().subscribe({
+      next: (data: FileDetails) => {
+        console.log('Record retrieved successfully:', data);
+        this.fileRecords = data;
+      },
+      error: (error) => {
+        console.error('Error retrieving record:', error);
+      }
+    });
+  }
+
   async getEventDetails(): Promise<EventDisruptions> {
     try {
       const response = await firstValueFrom(this.apiService.getEventDetails()) as EventDisruptions;
       console.log(`Event disruptions data for :`, response);
-      this.loggingService.addLog(`Event disruptions data fetched successfully`);
       this.eventDisruptions = response;
       return response;
     } catch (error) {
@@ -70,7 +92,6 @@ export class EventStatusService {
     try {
       const response = await firstValueFrom(this.apiService.getHourlyEventDetails()) as HourlyEvent[];
       console.log(`Hourly event data for :`, response);
-      this.loggingService.addLog(`Hourly event data fetched successfully`);
       this.hourlyEvent = response;
       return response;
     } catch (error) {
