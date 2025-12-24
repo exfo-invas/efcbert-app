@@ -12,7 +12,7 @@
       </a>
     </ng-template>
     <ng-template #end>
-      <app-server-status [connStatus]="connStatus"></app-server-status>
+      <app-server-status [connStatus]="connStatus" (loginSuccess)="logingResponse($event)" (loginFailed)="openLoginDialog($event)"/>
     </ng-template>
   </p-megaMenu>
 
@@ -23,7 +23,7 @@
 
     <div class="side-nav">
       <div class="time-box">
-        <app-timer [eventStart]="trimerEvent"></app-timer>
+        <app-timer *ngIf="health" [eventStart]="trimerEvent"></app-timer>
       </div>
       <div class="nav-buttons">
         <p-button *ngIf="!suiteConn" label="Connect to test suite" (onClick)="openLoginDialog(true)"></p-button>
