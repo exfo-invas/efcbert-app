@@ -3,13 +3,13 @@
     <button pButton type="button" (click)="openPreview()" label="Preview / Print"></button>
   </div> -->
   <div class="cards-p">
-    <p-card header="PORT B1">
+    <p-card header="PORT - PHYSICAL">
       <table>
-        <tr class="initial-tr">
+        <!-- <tr class="initial-tr">
           <td>LASER Status</td>
           <td class="initial-tr">
           </td>
-        </tr>
+        </tr> -->
         <tr class="initial-tr" *ngFor="let col of physicalColumns">
           <td>{{ col.header }}</td>
           <td>:</td>
@@ -24,7 +24,7 @@
     </p-card>
   </div>
   <div class="cards-p">
-    <p-card header="PORT B1 (WWN)">
+    <p-card header="FLOW CONTROL & LOGIN">
       <table>
         <tr class="initial-tr" *ngFor="let col of wwnColumns">
           <td>{{ col.header }}</td>
@@ -49,7 +49,7 @@
           <td *ngIf="!isNew">{{ deviceConfigData[col.field] }}</td>
         </tr>
         <tr class="initial-tr">
-          <td>PSP Link</td>
+          <td>PORT PHYSICAL</td>
           <td>:</td>
           <td *ngIf="isNew">
             <p-skeleton width="5rem" styleClass="mb-2" />

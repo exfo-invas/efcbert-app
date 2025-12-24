@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   pspLink: string = "";
 
   physicalColumns = [
+    { field: 'laserStatus', header: 'Laser Status' },
     { field: 'fcRate', header: 'FC Rate' },
     { field: 'sfpPort', header: 'SFP & Port' },
     { field: 'txPower', header: 'TX Power' },
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit {
   wwnColumns = [
     { field: 'flowControl', header: 'Buffer Flow Control' },
     { field: 'bufferCredit', header: 'Available BB Credit' },
-    { field: 'loging', header: 'logging' }
+    { field: 'loging', header: 'Login Status' }
   ];
 
   wwnData = {
