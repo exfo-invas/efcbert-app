@@ -119,4 +119,9 @@ export class ApiService {
     return this.http.post(url, {}, {responseType: 'json'});
   }
 
+  getFileRecords() {
+    const url = this.baseUrl + '/config' + '/test/records';
+    console.log(url);
+    return this.http.get(url, {responseType: 'json'});
+  }
 }
