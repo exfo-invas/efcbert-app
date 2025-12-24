@@ -28,9 +28,9 @@ export class StandardEvent {
 }
 
 export class LatencyEvent {
-  last: string;
-  min: string;
-  max: string;
+  last: number;
+  min: number;
+  max: number;
 }
 
 export class HourlyStatus {
@@ -40,8 +40,16 @@ export class HourlyStatus {
 
 export class HourlyEvent {
   no: number;
+  timestamp: string;
   utilization: string;
   throughput: string;
   latency: string;
-  framesLoss: string;
+  frameLoss: string;
+}
+
+export class FileDetails {
+  startTime: string;
+  endTime: string;
+  eventFileName: string;
+  hourlyFileName: string;
 }
