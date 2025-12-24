@@ -115,7 +115,8 @@
 
         <ng-template pTemplate="header">
           <tr>
-            <th>Hour No.</th>
+            <!-- <th>Hour No.</th> -->
+            <th>Timestamp</th>
             <th>Line Utilization (%)</th>
             <th>Throughput (Mbps)</th>
             <th>Latency (ms)</th>
@@ -124,11 +125,12 @@
         </ng-template>
         <ng-template pTemplate="body" let-hourlyEvent>
           <tr>
-            <td>{{ hourlyEvent.no }}</td>
+            <!-- <td>{{ hourlyEvent.no }}</td> -->
+            <td>{{ hourlyEvent.timestamp }}</td>
             <td>{{ hourlyEvent.utilization }}</td>
             <td>{{ hourlyEvent.throughput }}</td>
             <td>{{ hourlyEvent.latency }}</td>
-            <td>{{ hourlyEvent.framesLoss }}</td>
+            <td>{{ hourlyEvent.frameLoss }}</td>
           </tr>
         </ng-template>
       </p-table>
