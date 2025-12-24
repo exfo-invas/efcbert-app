@@ -106,6 +106,21 @@ export class PrintService {
       </tr>
     `).join('');
 
+    const fileRecords = this.eventStatus.getFileRecordsData();
+
+    const fileRows = `
+      <tr>
+        <td style="text-align:center">Full Event Record</td>
+        <td style="text-align:left">${fileRecords.eventFileName ?? 'File not generated'}</td>
+      </tr>
+      <tr>
+        <td style="text-align:center">Hourly Event Record</td>
+        <td style="text-align:left">${fileRecords.hourlyFileName ?? 'File not generated'}</td>
+      </tr>
+    `;
+
+    const filename = this.generateFilename();   // <-- ALWAYS USE THIS FILENAME
+
     // Build the HTML for the report
     const html = `
       <html>
@@ -187,6 +202,25 @@ export class PrintService {
           </div>
           <h1>Enhanced FC BERT Test Report</h1>
           <div class="line"></div>
+          <!-- Start time and filename generated -->
+          <div class="print-section">
+            <table border="1" cellspacing="0" cellpadding="6">
+              <thead>
+                <tr>
+                  <th>Start Time</th>
+                  <th>File Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align:center">${fileRecords.startTime ?? ''}</td>
+                  <td style="text-align:center">${filename}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="line"></div>
 
           <div class="section-title">Test Summary</div>
           <div class="print-section">
@@ -246,11 +280,12 @@ export class PrintService {
                 </tr>
               </tbody>
             </table>
+            <div>Note: In the above tables, '1' indicates 'ON' and '0' indicates 'OFF' for relevant settings.</div>
           </div>
           <div class="line"></div>
-          <div class="section-title">Event Disruptions</div>
+          <div class="section-title">Test Summary</div>
           <div class="print-section">
-            <h4>Standard Event</h4>
+            <h4>EFCBert Results</h4>
             <table border="1" cellspacing="0" cellpadding="6">
               <thead>
                 <tr>
@@ -342,13 +377,25 @@ export class PrintService {
               </tbody>
             </table>
           </div>
-          
+          <div class="line"></div>
+          <div class="section-title">File Records</div>
+          <div class="print-section">
+            <table border="1" cellspacing="0" cellpadding="6">
+              <thead>
+                <tr>
+                  <th>File Type</th>
+                  <th>File Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${fileRows}
+              </tbody>
+            </table>
+          </div>
         </body>
       </html>
     `;
     const electronAPI = (window as any).electronAPI || null;
-
-    const filename = this.generateFilename();   // <-- ALWAYS USE THIS FILENAME
 
     const pdfBase64 = await html2pdf()
       .from(html)
@@ -367,7 +414,9 @@ export class PrintService {
     //   return;
     // }
     // w.document.write(html);
-    // w.document.close(); MOVED TO previewInPopup
+    // w.document.close();
+
+    this.previewInPopup(html);
 
     // Browser fallback (not electron)
     if (!electronAPI || !electronAPI.savePdf) {
@@ -383,7 +432,6 @@ export class PrintService {
       filename,
       dataBase64: base64Clean
     });
-    this.previewInPopup(html);
     return result;
   }
 
