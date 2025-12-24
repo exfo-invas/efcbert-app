@@ -26,14 +26,17 @@
         <app-timer *ngIf="health" [eventStart]="trimerEvent"></app-timer>
       </div>
       <div class="nav-buttons">
-        <p-button *ngIf="!suiteConn" label="Connect to test suite" (onClick)="openLoginDialog(true)"></p-button>
+        <p-button *ngIf="health && !suiteConn" label="Connect to test suite" (onClick)="openLoginDialog(true)"></p-button>
+        <p-button *ngIf="!health && maxTimeout" label="Restart server" styleClass="p-button-danger" (onClick)="restart()" />
+        <p-tag *ngIf="!health" icon="pi pi-exclamation-triangle" severity="warn" [value]="counting()" />
+        <p-progress-spinner *ngIf="serverLoading" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
         <app-login-page [visible]="openLogin" (loginSuccess)="logingResponse($event)"
           (loginFailed)="openLoginDialog($event)"></app-login-page>
         <p-button *ngIf="suiteConn" [disabled]="testStarted" [loading]="isLoading" label="Start" icon="pi pi-forward"
           iconPos="left" (onClick)="startEvent()"></p-button>
         <p-button *ngIf="suiteConn" [disabled]="!suiteConn || !testStarted" [loading]="isLoading" label="Stop"
           icon="pi pi-stop" iconPos="left" (onClick)="stopEvent()" styleClass="p-button-danger"></p-button>
+        <p-button *ngIf="health && suiteConn" type="button" (click)="print()" label="Preview / Print"></p-button>
       </div>
-    </div>
   </div>
 </div>
