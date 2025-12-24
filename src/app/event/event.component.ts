@@ -15,9 +15,9 @@ export class EventComponent implements OnInit, OnDestroy {
   private hourlyCounterIntervalId?: any;
 
   latencyEvent: LatencyEvent = {
-    last: '-',
-    min: '-',
-    max: '-'
+    last: 0,
+    min: 0,
+    max: 0
   }
 
   standardEvent: StandardEvent = {
@@ -60,7 +60,7 @@ export class EventComponent implements OnInit, OnDestroy {
   ]
 
   hourlyEvents: HourlyEvent[] = [
-    { no: 1, utilization: '-', throughput: '-', latency: '-', framesLoss: '-' }
+    { no: 1, timestamp: '', utilization: '-', throughput: '-', latency: '-', frameLoss: '-' }
   ];
 
   hourlyStatus: HourlyStatus = {
@@ -178,7 +178,7 @@ export class EventComponent implements OnInit, OnDestroy {
 
   private assignLatencyResponse(response: LatencyEvent): void {
     if (!this.latencyEvent) {
-      this.latencyEvent = { last: '', min: '', max: '' } as LatencyEvent;
+      this.latencyEvent = { last: 0, min: 0, max: 0 } as LatencyEvent;
     }
     if (response) {
       Object.assign(this.latencyEvent, response);
@@ -194,7 +194,7 @@ export class EventComponent implements OnInit, OnDestroy {
   private assignHourlyEvent(): HourlyEvent[] {
     const currentLength = this.hourlyEvents.length;
     for (let i = currentLength + 1; i <= 20; i++) {
-      this.hourlyEvents.push({ no: i, utilization: '-', throughput: '-', latency: '-', framesLoss: '-' });
+      this.hourlyEvents.push({ no: i, timestamp: '-', utilization: '-', throughput: '-', latency: '-', frameLoss: '-' });
     }
     return this.hourlyEvents;
   }
