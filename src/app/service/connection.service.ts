@@ -70,6 +70,7 @@ export class ConnectionService {
         console.log('connection.service:getAppHealth: error closing connection');
         console.log('Error message:', error.message, 'Status:', error.status);
       });
+    console.log("connection.service:getAppHealth: Connection service getLatestStatus() fetched status", this.status);
   }
 
   getAppHealth() {
