@@ -210,10 +210,12 @@ export class EventComponent implements OnInit, OnDestroy {
   }
 
   private stopPolling(): void {
+
     if (this.pollingIntervalId) {
       clearInterval(this.pollingIntervalId);
       this.pollingIntervalId = undefined;
     }
+    void this.executeHourlyEventRequest();
   }
 
   private async pollIteration(): Promise<void> {
@@ -234,11 +236,10 @@ export class EventComponent implements OnInit, OnDestroy {
         this.hourlyStatus = eventDisruptions.hourlyStatus;
         if (this.hourlyStatus && this.hourlyStatus.isReady) {
           this.apiHourlyStatus = true;
-          const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
-          this.assignHourlyEventData(hourlyEventDetails);
+          await this.executeHourlyEventRequest();
           this.apiHourlyStatus = false;
         }
-        this.cdr.detectChanges();                     // Will work **only inside zone**
+        this.cdr.detectChanges();   // Will work **only inside zone**
       });
 
     } catch (error) {
@@ -246,5 +247,10 @@ export class EventComponent implements OnInit, OnDestroy {
       this.apiStatus = false;
       this.apiHourlyStatus = false;
     }
+  }
+
+  private async executeHourlyEventRequest(): Promise<void> {
+    const hourlyEventDetails = await this.eventStatus.getHourlyEventDetails();
+    this.assignHourlyEventData(hourlyEventDetails);
   }
 }
