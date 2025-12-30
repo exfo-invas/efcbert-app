@@ -52,8 +52,10 @@ export class PrintService {
     const pspLink = this.fullStatusData?.pspLinkStatus || '';
 
     this.eventDisruptions = this.eventStatus.getEventDisruptions();
+    console.log('Event Disruptions Data in Print Service:', this.eventDisruptions);
 
     this.hourlyEvent = this.eventStatus.getHourlyEvent();
+    console.log('Hourly Event Data in Print Service:', this.hourlyEvent);
 
     // Build extra HTML snippets for event disruptions
     const trafficRows = (this.eventDisruptions?.traffic || []).map(t => `
@@ -111,11 +113,11 @@ export class PrintService {
     const fileRows = `
       <tr>
         <td style="text-align:center">Full Event Record</td>
-        <td style="text-align:left">${fileRecords.eventFileName ?? 'File not generated'}</td>
+        <td style="text-align:left">${fileRecords.eventFileName ?? '-'}</td>
       </tr>
       <tr>
         <td style="text-align:center">Hourly Event Record</td>
-        <td style="text-align:left">${fileRecords.hourlyFileName ?? 'File not generated'}</td>
+        <td style="text-align:left">${fileRecords.hourlyFileName ?? '-'}</td>
       </tr>
     `;
 
@@ -407,16 +409,7 @@ export class PrintService {
 
     const base64Clean = pdfBase64.replace(/^data:application\/pdf;base64,/, '');
 
-    // // Write content to popup and close
-    // if (!w) {
-    //   // Popup blocked or failed to open
-    //   console.warn('Could not open report window');
-    //   return;
-    // }
-    // w.document.write(html);
-    // w.document.close();
-
-    this.previewInPopup(html);
+    //this.previewInPopup(html);
 
     // Browser fallback (not electron)
     if (!electronAPI || !electronAPI.savePdf) {
