@@ -101,7 +101,7 @@
     </p-tabPanel>
 
     <p-tabPanel header="Hourly Event">
-      <p-table [value]="hourlyEvents" [scrollable]="false" [size]="'small'">
+      <p-table [value]="hourlyEvents" [scrollable]="true" [scrollHeight]="'calc(95vh - 130px)'">
         <ng-template #caption>
           <div class="heading">
             <div class="tags no-print">
