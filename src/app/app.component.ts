@@ -197,6 +197,8 @@ export class AppComponent implements OnInit {
 
   // Add this method to fix the missing stopEvent error
   stopEvent(): void {
+    this.isLoading = true;
+    this.print();
     // TODO: Implement stop logic here
     this.apiService.eventHandler(false).subscribe({
       next: (data: any) => {
@@ -204,8 +206,6 @@ export class AppComponent implements OnInit {
         this.loggingService.addLog('AppComponent: Test Event stopped successfully');
         this.eventStatusService.connectionStatus.next(false);
         this.eventStatusService.setEventStatus(false);
-        this.print();
-        this.eventStatusService.resetEventData();
         this.testStarted = false; // Reset testStarted to false after stopping the event
         this.trimerEvent = false; // Reset the timer event flag to false
         this.loggingService.addLog('Test Event stopped successfully');
@@ -216,6 +216,8 @@ export class AppComponent implements OnInit {
         this.errorMessage = 'Failed to stop the event. Please try again later.';
       }
     })
+    this.isLoading = false;
+    this.eventStatusService.resetEventData();
     this.apiService.resetConnetion();
   }
 
