@@ -174,7 +174,7 @@ export class AppComponent implements OnInit {
           this.suiteConn = true; // Enable the button after starting the event
           this.testStarted = true; // Set testStarted to true after starting the event
           this.isLoading = false; // Set the loading state to false after the event is started
-          this.router.navigate(['/event']); // Navigate to the event page
+          this.router.navigate(['']); // Navigate to the event page
           this.trimerEvent = true; // Set the timer event flag to true
         }
       },
