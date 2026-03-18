@@ -1,59 +1,11 @@
-## Architecture — Desktop App with Embedded Backend
-
-This is not a traditional web app. It is an Electron desktop application that bundles three runtimes together into a single installable executable.
-
-```
-┌─────────────────────────────────────────────┐
-│              Electron (Desktop Shell)        │
-│  ┌─────────────────────┐  ┌───────────────┐ │
-│  │  Angular SPA (UI)   │  │ Java Backend  │ │
-│  │  Chromium renderer  │  │ localhost:8080 │ │
-│  └──────────┬──────────┘  └───────┬───────┘ │
-│             │    HTTP REST         │         │
-│             └──────────────────────┘         │
-│                 IPC (preload bridge)         │
-└─────────────────────────────────────────────┘
-```
-
-### Electron — The Desktop Shell
-
-Electron runs two processes:
-
-- **Main process** (`src/electron.prod.js`) — full Node.js access. Spawns the Java JAR on startup, manages the app window, and handles file system operations.
-- **Renderer process** — a Chromium browser tab that loads the Angular app.
-
-### IPC Security Bridge
-
-The preload script (`src/preload.js`) exposes a controlled API as `window.electronAPI` to Angular. Angular cannot access Node.js or the filesystem directly — everything goes through this bridge:
-
-```
-window.electronAPI.startServer()  →  IPC  →  main process  →  spawns Java JAR
-window.electronAPI.savePdf(data)  →  IPC  →  main process  →  writes file to disk
-window.electronAPI.openPdf(path)  →  IPC  →  main process  →  opens with OS viewer
-```
-
-### Angular SPA — The UI
-
-A standard Angular 19 app served inside Chromium, communicating with the Java backend over HTTP (`localhost:8080`) just like a browser app talking to a remote API — except the server runs locally.
-
-- **Health polling** — `AppComponent` pings `/actuator/health` every 3–30 seconds, tracking up to 60 consecutive failures before marking the server unreachable.
-- **Live metrics** — `EventComponent` polls `/event/details` every 3 seconds during an active test.
-- All HTTP calls are centralized in `ApiService`.
-
-### Java Spring Boot — The Embedded Backend
-
-`FCBert-0.0.1-SNAPSHOT.jar` is bundled inside the Electron package as a resource file. Electron spawns it as a child process on startup. It manages telnet sessions to network devices, runs the FC BERT test logic, and shuts down cleanly via `POST /actuator/shutdown` when Electron closes.
-
-### Why This Pattern?
-
-| Concern | Solution |
-|---|---|
-| Native file system access | Electron main process |
-| Rich, maintainable UI | Angular + PrimeNG |
-| Complex network/hardware logic | Java (existing codebase reused) |
-| Single installable binary | Electron Packager bundles all three |
-
 # Enhanced FC BERT
+
+![Angular](https://img.shields.io/badge/Angular-19-DD0031?logo=angular&logoColor=white)
+![Electron](https://img.shields.io/badge/Electron-22-47848F?logo=electron&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)
+![Java](https://img.shields.io/badge/Java-Spring%20Boot-6DB33F?logo=springboot&logoColor=white)
+![PrimeNG](https://img.shields.io/badge/PrimeNG-19-DD6B20?logo=primeng&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-LTS-339933?logo=nodedotjs&logoColor=white)
 
 A desktop application for network testing that measures traffic disruption, frame loss, latency, and throughput. Built with Angular, Electron, and a bundled Java Spring Boot backend.
 
@@ -154,3 +106,58 @@ Reports are generated automatically when a test event is stopped and saved to:
 ```
 Desktop/EnhancedFcbert/<date>/
 ```
+
+## Architecture — Desktop App with Embedded Backend
+
+This is not a traditional web app. It is an Electron desktop application that bundles three runtimes together into a single installable executable.
+
+```
+┌─────────────────────────────────────────────┐
+│              Electron (Desktop Shell)        │
+│  ┌─────────────────────┐  ┌───────────────┐ │
+│  │  Angular SPA (UI)   │  │ Java Backend  │ │
+│  │  Chromium renderer  │  │ localhost:8080 │ │
+│  └──────────┬──────────┘  └───────┬───────┘ │
+│             │    HTTP REST         │         │
+│             └──────────────────────┘         │
+│                 IPC (preload bridge)         │
+└─────────────────────────────────────────────┘
+```
+
+### Electron — The Desktop Shell
+
+Electron runs two processes:
+
+- **Main process** (`src/electron.prod.js`) — full Node.js access. Spawns the Java JAR on startup, manages the app window, and handles file system operations.
+- **Renderer process** — a Chromium browser tab that loads the Angular app.
+
+### IPC Security Bridge
+
+The preload script (`src/preload.js`) exposes a controlled API as `window.electronAPI` to Angular. Angular cannot access Node.js or the filesystem directly — everything goes through this bridge:
+
+```
+window.electronAPI.startServer()  →  IPC  →  main process  →  spawns Java JAR
+window.electronAPI.savePdf(data)  →  IPC  →  main process  →  writes file to disk
+window.electronAPI.openPdf(path)  →  IPC  →  main process  →  opens with OS viewer
+```
+
+### Angular SPA — The UI
+
+A standard Angular 19 app served inside Chromium, communicating with the Java backend over HTTP (`localhost:8080`) just like a browser app talking to a remote API — except the server runs locally.
+
+- **Health polling** — `AppComponent` pings `/actuator/health` every 3–30 seconds, tracking up to 60 consecutive failures before marking the server unreachable.
+- **Live metrics** — `EventComponent` polls `/event/details` every 3 seconds during an active test.
+- All HTTP calls are centralized in `ApiService`.
+
+### Java Spring Boot — The Embedded Backend
+
+`FCBert-0.0.1-SNAPSHOT.jar` is bundled inside the Electron package as a resource file. Electron spawns it as a child process on startup. It manages telnet sessions to network devices, runs the FC BERT test logic, and shuts down cleanly via `POST /actuator/shutdown` when Electron closes.
+
+### Why This Pattern?
+
+| Concern | Solution |
+|---|---|
+| Native file system access | Electron main process |
+| Rich, maintainable UI | Angular + PrimeNG |
+| Complex network/hardware logic | Java (existing codebase reused) |
+| Single installable binary | Electron Packager bundles all three |
